@@ -1,19 +1,20 @@
-<nav class="app-nav" aria-label="Main navigation">
-  <a routerLink="/signal-forms-demo">Signal Forms Demo</a>
-  <a routerLink="/linked-signal-demo">linkedSignal Demo</a>
-  <a routerLink="/debounced-signal-demo">Debounced Signals</a>
-  <a routerLink="/inject-async-demo">injectAsync</a>
-  <a routerLink="/fetch-backend-demo">FetchBackend</a>
-  <a routerLink="/hydration-demo">Hydration</a>
-  <a routerLink="/resource-demo">Resource API</a>
-  <a routerLink="/compiler-demo">Compiler</a>
-  <a routerLink="/router-demo">Router</a>
-  <a routerLink="/typescript6-demo">TypeScript 6</a>
-  <a routerLink="/breaking-changes">Breaking Changes</a>
-  <a routerLink="/material-demo">Material 22</a>
-  <a routerLink="/cli-demo">CLI</a>
-</nav>
-
-
+<mat-toolbar class="app-toolbar" aria-label="Main navigation">
+  <span class="app-title">Angular 22</span>
+  <nav class="nav-links">
+    <a mat-button routerLink="/signal-forms-demo" routerLinkActive="active">Signal Forms</a>
+    <a mat-button routerLink="/linked-signal-demo" routerLinkActive="active">linkedSignal</a>
+    <a mat-button routerLink="/debounced-signal-demo" routerLinkActive="active">Debounced</a>
+    <a mat-button routerLink="/inject-async-demo" routerLinkActive="active">injectAsync</a>
+    <a mat-button routerLink="/fetch-backend-demo" routerLinkActive="active">FetchBackend</a>
+    <a mat-button routerLink="/hydration-demo" routerLinkActive="active">Hydration</a>
+    <a mat-button routerLink="/resource-demo" routerLinkActive="active">Resource</a>
+    <a mat-button routerLink="/compiler-demo" routerLinkActive="active">Compiler</a>
+    <a mat-button routerLink="/router-demo" routerLinkActive="active">Router</a>
+    <a mat-button routerLink="/typescript6-demo" routerLinkActive="active">TS 6</a>
+    <a mat-button routerLink="/breaking-changes" routerLinkActive="active">Breaking</a>
+    <a mat-button routerLink="/material-demo" routerLinkActive="active">Material</a>
+    <a mat-button routerLink="/cli-demo" routerLinkActive="active">CLI</a>
+  </nav>
+</mat-toolbar>
 
 <router-outlet />
