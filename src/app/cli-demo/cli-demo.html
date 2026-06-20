@@ -1,0 +1,123 @@
+<div class="cli-demo-container">
+  <h2>Angular CLI 22 Changes</h2>
+  <p class="subtitle">New features, Vitest improvements, breaking changes, and deprecations in the Angular CLI v22 release.</p>
+
+  <!-- Section 1: New Features -->
+  <section class="demo-section">
+    <h3>New Features</h3>
+    <div class="feature-list">
+      <div class="feature-item">
+        <span class="badge badge-new">Chunk Optimization</span>
+        <p>Enabled by default with smart heuristics — the build system now automatically optimizes chunk splitting for better loading performance without manual configuration.</p>
+      </div>
+      <div class="feature-item">
+        <span class="badge badge-new">Subresource Integrity</span>
+        <p>Validates integrity for dynamically loaded modules, ensuring scripts loaded at runtime haven't been tampered with.</p>
+      </div>
+      <div class="feature-item">
+        <span class="badge badge-changed">platform option stabilized</span>
+        <p>Renamed from <code>experimentalPlatform</code> to <code>platform</code>. The experimental prefix has been dropped now that the API is stable.</p>
+      </div>
+      <div class="feature-item">
+        <span class="badge badge-new">AI Config</span>
+        <p>The <code>ai-config</code> schematic now includes Angular MCP server configuration, making it easier to integrate AI tooling with your Angular project.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Vitest Improvements -->
+  <section class="demo-section">
+    <h3>Vitest Improvements</h3>
+    <p>The Vitest integration continues to mature with several new options:</p>
+    <ul class="improvements-list">
+      <li><strong>isolate</strong> — Run each test file in its own isolated environment</li>
+      <li><strong>quiet</strong> — Suppress build output noise during test runs</li>
+      <li><strong>Istanbul coverage</strong> — Full Istanbul coverage provider support alongside v8</li>
+      <li><strong>Runtime Zone.js detection</strong> — Automatically detects and warns about Zone.js usage at runtime</li>
+    </ul>
+    <div class="code-note">
+      <div class="code-label">angular.json — Vitest config</div>
+      <pre><code>{{ vitestCode }}</code></pre>
+    </div>
+  </section>
+
+  <!-- Section 3: CLI Breaking Changes -->
+  <section class="demo-section">
+    <h3>CLI Breaking Changes</h3>
+    <div class="breaking-table">
+      <div class="table-row table-header">
+        <div class="table-cell">Change</div>
+        <div class="table-cell">Details</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell"><span class="badge badge-removed">Removed</span> Node.js v20</div>
+        <div class="table-cell">Minimum version is now <strong>v22.22.0</strong> or <strong>v24.13.1</strong></div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell"><span class="badge badge-removed">Removed</span> <code>@angular-devkit/architect-cli</code></div>
+        <div class="table-cell">Use <code>@angular-devkit/architect</code> directly</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell"><span class="badge badge-removed">Removed</span> Jest &amp; Web Test Runner builders</div>
+        <div class="table-cell">Migrate to Vitest via <code>@angular/build:unit-test</code></div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell"><span class="badge badge-changed">Changed</span> <code>PORT</code> env var</div>
+        <div class="table-cell">Now takes <strong>highest priority</strong> for <code>ng serve</code> port selection</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell"><span class="badge badge-changed">Changed</span> <code>istanbul-lib-instrument</code></div>
+        <div class="table-cell">Now an <strong>optional peer dependency</strong> — install explicitly if needed</div>
+      </div>
+      <div class="table-row">
+        <div class="table-cell"><span class="badge badge-changed">Changed</span> SSR host validation</div>
+        <div class="table-cell">Invalid hosts now return <strong>400 Bad Request</strong> instead of falling back to CSR</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: CLI Deprecations -->
+  <section class="demo-section">
+    <h3>CLI Deprecations</h3>
+    <p>The following are deprecated and will be removed in a future version:</p>
+    <ul class="deprecation-list">
+      <li>
+        <span class="deprecated">Webpack builders</span>
+        <span class="replacement">→ Use <code>@angular/build</code></span>
+      </li>
+      <li>
+        <span class="deprecated">@angular-devkit/build-webpack</span>
+        <span class="replacement">→ Use <code>@angular/build</code></span>
+      </li>
+      <li>
+        <span class="deprecated">CommonEngine APIs in @angular/ssr</span>
+        <span class="replacement">→ Use <code>AngularNodeAppEngine</code> / <code>AngularAppEngine</code></span>
+      </li>
+      <li>
+        <span class="deprecated">@ngtools/webpack</span>
+        <span class="replacement">→ Use <code>@angular/build</code></span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Section 5: Migration Quick Reference -->
+  <section class="demo-section notes-section">
+    <h3>Migration Quick Reference</h3>
+    <div class="breaking-table migration-table">
+      <div class="table-row table-header">
+        <div class="table-cell">Old</div>
+        <div class="table-cell">New</div>
+      </div>
+      @for (row of migrationRows; track row.old) {
+        <div class="table-row">
+          <div class="table-cell">
+            <span class="badge" [class.badge-removed]="row.badge === 'removed'" [class.badge-changed]="row.badge === 'changed'">
+              {{ row.old }}
+            </span>
+          </div>
+          <div class="table-cell replacement">{{ row.new }}</div>
+        </div>
+      }
+    </div>
+  </section>
+</div>

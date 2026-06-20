@@ -1,0 +1,196 @@
+<main class="demo-container" aria-labelledby="demo-heading">
+  <h1 id="demo-heading">linkedSignal with custom <code>set</code></h1>
+  <p class="subtitle">
+    Angular 22.1 adds a <code>set</code> option to <code>linkedSignal</code>,
+    giving you control over how linked signals behave when updated.
+  </p>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 1. Basic linkedSignal                                    -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="basic-heading">
+    <h2 id="basic-heading">1. Basic linkedSignal</h2>
+    <p class="description">
+      Resets to the first option whenever <code>shippingOptions</code> changes.
+      Manual selection via <code>.set()</code> is overwritten on source change.
+    </p>
+
+    <div class="option-list" role="radiogroup" aria-label="Shipping method">
+      @for (option of shippingOptions(); track option.id) {
+        <button
+          type="button"
+          [class.selected]="selectedOption().id === option.id"
+          [attr.aria-pressed]="selectedOption().id === option.id"
+          (click)="changeShipping($index)"
+        >
+          {{ option.name }} &mdash; ${{ option.price }}
+        </button>
+      }
+    </div>
+
+    <p class="state">
+      Selected: <strong>{{ selectedOption().name }}</strong>
+    </p>
+
+    <div class="btn-group">
+      <button type="button" class="btn" (click)="swapShippingOptions()">
+        Swap Options
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="resetShippingOptions()">
+        Reset
+      </button>
+    </div>
+
+    <pre class="code-note"><code>selectedOption = linkedSignal(() => this.shippingOptions()[0]);</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 2. linkedSignal with previous — smart preservation       -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="previous-heading">
+    <h2 id="previous-heading">2. With <code>previous</code> — Smart Selection</h2>
+    <p class="description">
+      Uses <code>source</code> + <code>computation</code> with <code>previous</code>
+      to preserve the user's selection if it still exists in the new options.
+    </p>
+
+    <div class="option-list" role="radiogroup" aria-label="Smart shipping method">
+      @for (option of smartOptions(); track option.id) {
+        <button
+          type="button"
+          [class.selected]="smartSelection().id === option.id"
+          [attr.aria-pressed]="smartSelection().id === option.id"
+          (click)="selectSmart($index)"
+        >
+          {{ option.name }} &mdash; ${{ option.price }}
+        </button>
+      }
+    </div>
+
+    <p class="state">
+      Selected: <strong>{{ smartSelection().name }}</strong>
+      (${{ smartSelection().price }})
+    </p>
+
+    <div class="btn-group">
+      <button type="button" class="btn" (click)="updateSmartOptions()">
+        Update Options (keeps Air &amp; Sea)
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="resetSmartOptions()">
+        Reset
+      </button>
+    </div>
+
+    <pre class="code-note"><code>smartSelection = linkedSignal&lt;ShippingMethod[], ShippingMethod&gt;(&#123;
+  source: this.smartOptions,
+  computation: (newOptions, previous) =&gt; &#123;
+    if (previous) &#123;
+      const found = newOptions.find(o =&gt; o.id === previous.value.id);
+      if (found) return found;
+    &#125;
+    return newOptions[0];
+  &#125;,
+&#125;);</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 3. Custom `set` — Temperature Converter                 -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="temp-heading">
+    <h2 id="temp-heading">3. Custom <code>set</code> — Temperature Converter</h2>
+    <p class="description">
+      <code>tempFahrenheit</code> is derived from <code>tempCelsius</code>.
+      Setting Fahrenheit writes back to the Celsius source signal via the
+      custom <code>set</code> option.
+    </p>
+
+    <div class="temp-grid">
+      <div class="temp-field">
+        <label for="celsius">Celsius</label>
+        <input
+          id="celsius"
+          type="number"
+          [value]="tempCelsius()"
+          (change)="setCelsius(celsius.value)"
+          #celsius
+        />
+      </div>
+      <span class="temp-arrow" aria-hidden="true">&#x21C4;</span>
+      <div class="temp-field">
+        <label for="fahrenheit">Fahrenheit</label>
+        <input
+          id="fahrenheit"
+          type="number"
+          [value]="tempFahrenheit()"
+          (change)="setFahrenheit(fahrenheit.value)"
+          #fahrenheit
+        />
+      </div>
+    </div>
+
+    <p class="state">
+      {{ tempCelsius() }}&deg;C
+      = {{ tempFahrenheit() }}&deg;F
+      &mdash; <strong>{{ tempDescription() }}</strong>
+    </p>
+
+    <pre class="code-note"><code>tempFahrenheit = linkedSignal(
+  () =&gt; Math.round((this.tempCelsius() * 9) / 5 + 32),
+  &#123;
+    set: (valF) =&gt; this.tempCelsius.set(Math.round(((valF - 32) * 5) / 9)),
+  &#125;
+);</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 4. Custom `set` with `rawSet` — Nested Property Update  -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="nested-heading">
+    <h2 id="nested-heading">4. <code>set</code> with <code>rawSet</code> — Nested Property</h2>
+    <p class="description">
+      <code>orderShipping</code> is linked to <code>order().shippingMethod</code>.
+      The custom <code>set</code> receives <code>rawSet</code> to update the
+      linked signal directly, while also writing back to the parent object.
+    </p>
+
+    <div class="order-grid">
+      <div class="order-field">
+        <label for="order-shipping">Shipping Method</label>
+        <select
+          id="order-shipping"
+          [value]="orderShipping()"
+          (change)="setOrderShipping(orderShippingSelect.value)"
+          #orderShippingSelect
+        >
+          <option value="Ground">Ground</option>
+          <option value="Air">Air</option>
+          <option value="Express">Express</option>
+          <option value="Drone">Drone</option>
+        </select>
+      </div>
+      <div class="order-field">
+        <label for="order-notes">Order Notes</label>
+        <input
+          id="order-notes"
+          type="text"
+          [value]="orderNotes()"
+          (input)="setOrderNotes(orderNotesInput.value)"
+          placeholder="Add delivery instructions..."
+          #orderNotesInput
+        />
+      </div>
+    </div>
+
+    <div class="order-state">
+      <p class="state">Full order object (source of truth):</p>
+      <pre><code>{{ order() | json }}</code></pre>
+    </div>
+
+    <pre class="code-note"><code>orderShipping = linkedSignal(() =&gt; this.order().shippingMethod, &#123;
+  set: (newMethod, rawSet) =&gt; &#123;
+    this.order.update(current =&gt; (&#123; ...current, shippingMethod: newMethod &#125;));
+    rawSet(newMethod);
+  &#125;,
+&#125;);</code></pre>
+  </section>
+</main>

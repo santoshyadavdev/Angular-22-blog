@@ -1,0 +1,244 @@
+<main class="demo-container" aria-labelledby="demo-heading">
+  <h1 id="demo-heading">Compiler Improvements</h1>
+  <p class="subtitle">
+    Angular 22's compiler brings better type narrowing with <code>?.</code>,
+    correct <code>undefined</code> semantics for optional chaining,
+    HTML comment support, and <code>data-*</code> attribute isolation.
+  </p>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 1. Safe navigation (?.) with type narrowing              -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="narrowing-heading">
+    <h2 id="narrowing-heading">1. Safe Navigation + Type Narrowing</h2>
+    <p class="description">
+      The <code>?.</code> operator now correctly narrows nullable types in
+      templates. The compiler understands that after <code>user()?.company</code>
+      succeeds, <code>company</code> is non-null in the rest of the expression.
+    </p>
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-sm" (click)="setFullUser()">
+        Full User
+      </button>
+      <button type="button" class="btn btn-sm" (click)="setPartialUser()">
+        Partial User
+      </button>
+      <button type="button" class="btn btn-sm" (click)="clearUser()">
+        Null User
+      </button>
+    </div>
+
+    <div class="result-card">
+      <!-- Safe navigation chains — the compiler narrows at each step -->
+      <div class="narrow-row">
+        <span class="label">Name:</span>
+        <code>{{ user()?.name ?? 'null' }}</code>
+      </div>
+      <div class="narrow-row">
+        <span class="label">Email:</span>
+        <code>{{ user()?.email ?? 'undefined' }}</code>
+      </div>
+      <div class="narrow-row">
+        <span class="label">Company:</span>
+        <code>{{ user()?.company?.name ?? 'undefined' }}</code>
+      </div>
+      <div class="narrow-row">
+        <span class="label">City:</span>
+        <!-- Deep chain: user?.company?.address?.city -->
+        <code>{{ user()?.company?.address?.city ?? 'undefined' }}</code>
+      </div>
+      <div class="narrow-row">
+        <span class="label">ZIP:</span>
+        <!-- Optional property at the end -->
+        <code>{{ user()?.company?.address?.zip ?? 'undefined' }}</code>
+      </div>
+      <div class="narrow-row">
+        <span class="label">First score:</span>
+        <!-- Array access with ?. -->
+        <code>{{ user()?.scores?.[0] ?? 'undefined' }}</code>
+      </div>
+    </div>
+
+    <!-- Narrowing inside &#64;if — after the check, type is non-null -->
+    <div class="result-card narrowing-block">
+      @if (user(); as u) {
+        <p class="narrowed">
+          <span class="badge narrowed-badge">Narrowed!</span>
+          After <code>&#64;if (user(); as u)</code>, <code>u</code> is
+          <code>UserProfile</code> (not <code>null</code>):
+        </p>
+        <p>
+          <strong>{{ u.name }}</strong>
+          @if (u.company; as co) {
+            works at <strong>{{ co.name }}</strong>
+            @if (co.address; as addr) {
+              in {{ addr.city }}
+            }
+          }
+        </p>
+      } @else {
+        <p class="null-state">User is <code>null</code> — narrowed out.</p>
+      }
+    </div>
+
+    <pre class="code-note"><code>{{ narrowingCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 2. Optional chaining returns undefined                   -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="undefined-heading">
+    <h2 id="undefined-heading">2. Optional Chaining Returns <code>undefined</code></h2>
+    <p class="description">
+      Previously, Angular's <code>?.</code> could return <code>null</code> in
+      some cases. Now it always returns <code>undefined</code> when the chain
+      short-circuits — matching standard JavaScript behavior.
+    </p>
+
+    <div class="result-card">
+      <div class="narrow-row">
+        <span class="label">theme?.primary:</span>
+        <code>{{ config().theme?.primary ?? '(nullish)' }}</code>
+        <span class="type-hint">
+          @if (config().theme?.primary !== undefined) {
+            string
+          } @else {
+            undefined
+          }
+        </span>
+      </div>
+      <div class="narrow-row">
+        <span class="label">theme?.font:</span>
+        <code>{{ config().theme?.font ?? '(nullish)' }}</code>
+        <span class="type-hint">
+          @if (config().theme?.font !== undefined) {
+            string
+          } @else {
+            undefined ✓
+          }
+        </span>
+      </div>
+      <div class="narrow-row">
+        <span class="label">features?.darkMode:</span>
+        <code>{{ config().features?.darkMode ?? '(nullish)' }}</code>
+        <span class="type-hint">
+          @if (config().features?.darkMode !== undefined) {
+            boolean
+          } @else {
+            undefined ✓
+          }
+        </span>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-sm" (click)="toggleFeatures()">
+      Toggle features
+    </button>
+
+    <pre class="code-note"><code>{{ optionalChainingCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 3. HTML comments in templates                            -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="comments-heading">
+    <h2 id="comments-heading">3. HTML Comments in Templates</h2>
+    <p class="description">
+      Angular 22 now preserves standard HTML comments in templates.
+      Previously, <code>&lt;!-- ... --&gt;</code> was stripped.
+      Now you can use them for documentation, conditional markers, or
+      third-party integrations that read DOM comments.
+    </p>
+
+    <!-- This HTML comment is preserved in the rendered DOM! -->
+    <!-- Angular 22: HTML comments are now supported in templates -->
+    <div class="result-card comment-demo">
+      <p>Inspect this element in DevTools — you'll see HTML comments in the DOM.</p>
+      <!-- Section: user-visible content -->
+      <p class="highlight">
+        This paragraph has a comment above and below it in the template source.
+      </p>
+      <!-- End section -->
+    </div>
+
+    <pre class="code-note"><code>{{ commentsCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 4. data-* attributes don't bind inputs/outputs          -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="data-heading">
+    <h2 id="data-heading">4. <code>data-*</code> Attributes Are Isolated</h2>
+    <p class="description">
+      <code>data-</code> prefixed attributes no longer accidentally bind to
+      component inputs or outputs. They're treated as plain HTML data
+      attributes — useful for testing IDs, analytics hooks, and CSS selectors.
+    </p>
+
+    <div class="tags-demo">
+      @for (tag of tagData(); track tag.id) {
+        <!--
+          data-label and data-color are plain HTML attributes (for testing/CSS),
+          [label] and [color] are the actual Angular input bindings.
+        -->
+        <app-tag-badge
+          [label]="tag.label"
+          [color]="tag.color"
+          [attr.data-tag-id]="tag.id"
+          data-testid="tag-badge"
+        />
+      }
+    </div>
+
+    <div class="result-card">
+      <p>Inspect the badges above in DevTools:</p>
+      <ul class="attr-list">
+        <li>
+          <code>data-tag-id</code> and <code>data-testid</code> are plain
+          HTML attributes (not bound to inputs)
+        </li>
+        <li>
+          <code>[label]</code> and <code>[color]</code> are the actual
+          Angular input bindings
+        </li>
+        <li>
+          In Angular &lt;22, writing <code>data-label="x"</code> on a component
+          with a <code>label</code> input could accidentally bind it
+        </li>
+      </ul>
+    </div>
+
+    <pre class="code-note"><code>{{ dataAttrCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- Summary                                                  -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section notes-section" aria-labelledby="summary-heading">
+    <h2 id="summary-heading">Summary</h2>
+    <ul class="api-notes-list">
+      <li>
+        <strong>Safe navigation narrowing</strong> — <code>?.</code>
+        correctly narrows nullable types through the chain. After
+        <code>user?.company</code> succeeds, <code>company</code> is
+        non-null.
+      </li>
+      <li>
+        <strong>Optional chaining = <code>undefined</code></strong> —
+        Short-circuited <code>?.</code> returns <code>undefined</code>,
+        not <code>null</code>, matching JavaScript semantics.
+      </li>
+      <li>
+        <strong>HTML comments</strong> —
+        <code>&lt;!-- ... --&gt;</code> in templates are preserved in the
+        rendered DOM instead of being stripped.
+      </li>
+      <li>
+        <strong><code>data-*</code> isolation</strong> —
+        <code>data-</code> prefixed attributes are treated as plain HTML
+        attributes and never bind to component inputs or outputs.
+      </li>
+    </ul>
+  </section>
+</main>

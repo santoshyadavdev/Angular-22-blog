@@ -1,0 +1,251 @@
+<main class="demo-container" aria-labelledby="demo-heading">
+  <h1 id="demo-heading">Resource API Enhancements</h1>
+  <p class="subtitle">
+    Angular 22 brings significant improvements to the Resource API:
+    SSR caching via <code>id</code>, special params statuses,
+    streaming resources, and composition via snapshots.
+  </p>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 1. SSR Transfer Cache with `id`                         -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="cache-heading">
+    <h2 id="cache-heading">1. SSR Caching with <code>id</code></h2>
+    <p class="description">
+      Pass an <code>id</code> to <code>resource()</code> to cache its value in
+      <code>TransferState</code> during SSR. The client reuses the cached data
+      instead of re-fetching — zero network requests for the initial load.
+    </p>
+
+    <div class="result-card">
+      @if (cachedUser.isLoading()) {
+        <p class="loading">Loading user...</p>
+      } @else {
+        <p><strong>{{ cachedUser.value().name }}</strong></p>
+        <p class="secondary">{{ cachedUser.value().email }}</p>
+        <p class="secondary">Status: <code>{{ cachedUser.status() }}</code></p>
+      }
+    </div>
+
+    <pre class="code-note"><code>userResource = resource&lt;User, number&gt;(&#123;
+  id: 'featured-user', // SSR transfer cache key
+  params: () => 1,
+  loader: async (&#123; params: userId &#125;) => &#123;
+    const res = await fetch(\`/api/users/\$&#123;userId&#125;\`);
+    return res.json();
+  &#125;,
+  defaultValue: &#123; id: 0, name: 'Loading...' &#125;,
+&#125;);</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 2. ResourceParamsStatus — special return statuses       -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="params-heading">
+    <h2 id="params-heading">2. <code>ResourceParamsStatus</code></h2>
+    <p class="description">
+      Throw <code>ResourceParamsStatus.IDLE</code> or
+      <code>.LOADING</code> from the <code>params</code> function to control
+      the resource state without triggering the loader.
+    </p>
+
+    <div class="user-buttons">
+      <button
+        type="button"
+        class="btn btn-sm"
+        [class.selected]="selectedUserId() === null"
+        (click)="selectUser(null)"
+      >
+        None (idle)
+      </button>
+      @for (id of [1, 2, 3, 4, 5]; track id) {
+        <button
+          type="button"
+          class="btn btn-sm"
+          [class.selected]="selectedUserId() === id"
+          (click)="selectUser(id)"
+        >
+          User {{ id }}
+        </button>
+      }
+    </div>
+
+    <div class="result-card">
+      @switch (userDetail.status()) {
+        @case ('idle') {
+          <p class="idle">No user selected — resource is <code>idle</code></p>
+        }
+        @case ('loading') {
+          <p class="loading">Loading user...</p>
+        }
+        @case ('reloading') {
+          <p class="loading">Reloading...</p>
+        }
+        @case ('error') {
+          <p class="error">Error loading user</p>
+        }
+        @default {
+          @if (userDetail.value(); as user) {
+            <p><strong>{{ user.name }}</strong></p>
+            <p class="secondary">&#64;{{ user.username }} &mdash; {{ user.email }}</p>
+          }
+        }
+      }
+      <p class="status-row">
+        Status: <code class="status-badge" [attr.data-status]="userDetail.status()">{{ userDetail.status() }}</code>
+      </p>
+    </div>
+
+    <pre class="code-note"><code>selectedUserId = signal&lt;number | null&gt;(null);
+
+userDetail = resource&lt;User, number&gt;(&#123;
+  params: () => &#123;
+    const id = this.selectedUserId();
+    if (id === null) &#123;
+      throw ResourceParamsStatus.IDLE; // no fetch, stays idle
+    &#125;
+    return id;
+  &#125;,
+  loader: async (&#123; params &#125;) => fetch(\`/api/users/\$&#123;params&#125;\`).then(r => r.json()),
+&#125;);</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 3. Streaming Resources                                  -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="stream-heading">
+    <h2 id="stream-heading">3. Streaming <code>resource</code></h2>
+    <p class="description">
+      Use <code>stream</code> instead of <code>loader</code> to return a signal
+      that can push synchronous value updates over time — perfect for
+      WebSocket feeds, Server-Sent Events, or polling patterns.
+    </p>
+
+    <div class="result-card stream-card">
+      <p class="stream-value">{{ streamResource.value() }}</p>
+      <p class="status-row">
+        Status: <code class="status-badge" [attr.data-status]="streamResource.status()">{{ streamResource.status() }}</code>
+      </p>
+    </div>
+
+    <button type="button" class="btn" (click)="restartStream()">
+      Restart Stream
+    </button>
+
+    <pre class="code-note"><code>streamResource = resource&lt;string, number&gt;(&#123;
+  params: () => this.counter(),
+  stream: (&#123; params &#125;) => &#123;
+    const value = signal(&#123; value: 'initializing...' &#125;);
+    // Push updates synchronously
+    const interval = setInterval(() => &#123;
+      value.set(&#123; value: \`update \$&#123;step&#125;\` &#125;);
+    &#125;, 600);
+    return value;
+  &#125;,
+&#125;);</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 4. Resource Composition via Snapshots                   -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="snapshot-heading">
+    <h2 id="snapshot-heading">4. Composition via Snapshots</h2>
+    <p class="description">
+      Compose multiple resources into one using
+      <code>resourceFromSnapshots()</code>. It merges the <code>.snapshot</code>
+      signals of child resources into a unified <code>Resource</code>.
+      Use <code>ctx.chain()</code> to cascade params between resources.
+    </p>
+
+    <div class="result-card">
+      @switch (composedResource.status()) {
+        @case ('loading') {
+          <p class="loading">Loading post + author...</p>
+        }
+        @case ('error') {
+          <p class="error">Error loading data</p>
+        }
+        @case ('idle') {
+          <p class="idle">Idle</p>
+        }
+        @default {
+          @if (composedResource.value(); as data) {
+            <div class="composed-content">
+              <div class="post-block">
+                <h3>{{ data.post.title }}</h3>
+                <p>{{ data.post.body }}</p>
+              </div>
+              <div class="author-block">
+                <span class="author-label">Author:</span>
+                <strong>{{ data.author.name }}</strong>
+                <span class="secondary">({{ data.author.email }})</span>
+              </div>
+            </div>
+          }
+        }
+      }
+      <p class="status-row">
+        Status: <code class="status-badge" [attr.data-status]="composedResource.status()">{{ composedResource.status() }}</code>
+      </p>
+    </div>
+
+    <div class="nav-controls">
+      <button type="button" class="btn" (click)="prevPost()">&larr; Prev</button>
+      <span class="post-id-badge">Post #{{ postId() }}</span>
+      <button type="button" class="btn" (click)="nextPost()">Next &rarr;</button>
+    </div>
+
+    <pre class="code-note"><code>// Resource A
+postResource = resource(&#123; params: () => this.postId(), loader: ... &#125;);
+
+// Resource B — chained off A
+authorResource = resource(&#123;
+  params: (ctx) => &#123;
+    const post = ctx.chain(this.postResource); // waits for post
+    return post.userId;
+  &#125;,
+  loader: ...
+&#125;);
+
+// Composed view
+composedResource = resourceFromSnapshots(() => &#123;
+  const post = this.postResource.snapshot();
+  const author = this.authorResource.snapshot();
+  // Merge snapshots into one ResourceSnapshot
+  ...
+&#125;);</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- Summary                                                 -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section notes-section" aria-labelledby="summary-heading">
+    <h2 id="summary-heading">Summary</h2>
+    <ul class="api-notes-list">
+      <li>
+        <strong><code>id</code> option</strong> — Cache resource data in
+        <code>TransferState</code> during SSR. The client rehydrates from
+        cache without re-fetching.
+      </li>
+      <li>
+        <strong><code>ResourceParamsStatus</code></strong> — Throw
+        <code>.IDLE</code> or <code>.LOADING</code> from params to
+        control the resource state without triggering the loader.
+      </li>
+      <li>
+        <strong><code>stream</code></strong> — Return a signal from the
+        loader that pushes synchronous updates. Perfect for real-time
+        data sources.
+      </li>
+      <li>
+        <strong><code>resourceFromSnapshots()</code></strong> — Compose
+        multiple resources into one by merging their snapshot signals.
+      </li>
+      <li>
+        <strong><code>ctx.chain()</code></strong> — In the params function,
+        chain off another resource's value. Propagates loading/error
+        states automatically.
+      </li>
+    </ul>
+  </section>
+</main>

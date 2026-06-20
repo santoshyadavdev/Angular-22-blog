@@ -1,0 +1,182 @@
+<main class="demo-container" aria-labelledby="demo-heading">
+  <h1 id="demo-heading">Incremental Hydration (Default in v22)</h1>
+  <p class="subtitle">
+    Angular 22 enables <strong>incremental hydration by default</strong> for SSR apps.
+    Components inside <code>&#64;defer</code> blocks with <code>hydrate</code> triggers
+    are server-rendered but only hydrated on the client when the trigger fires —
+    dramatically improving Time to Interactive.
+  </p>
+
+  <div class="info-banner" role="note">
+    <strong>How to observe:</strong> Each widget below shows its hydration timestamp.
+    In an SSR app, widgets show "(server-rendered)" until their
+    <code>hydrate</code> trigger fires.  In dev mode (client-only), they hydrate
+    immediately — but the <code>&#64;defer</code> structure is still in place.
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 1. hydrate on immediate                                 -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="immediate-heading">
+    <h2 id="immediate-heading">
+      <span class="trigger-badge immediate">hydrate on immediate</span>
+    </h2>
+    <p class="description">
+      Hydrates as soon as the page loads. Use for above-the-fold content
+      that must be interactive right away.
+    </p>
+
+    @defer (hydrate on immediate) {
+      <app-hero-widget />
+    } @placeholder {
+      <div class="widget-placeholder">Loading hero...</div>
+    }
+
+    <pre class="code-note"><code>&#64;defer (hydrate on immediate) &#123;
+  &lt;app-hero-widget /&gt;
+&#125;</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 2. hydrate on viewport                                  -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="viewport-heading">
+    <h2 id="viewport-heading">
+      <span class="trigger-badge viewport">hydrate on viewport</span>
+    </h2>
+    <p class="description">
+      Hydrates when the element scrolls into the viewport.
+      Perfect for below-the-fold content like comments.
+    </p>
+
+    @defer (hydrate on viewport) {
+      <app-comments-widget />
+    } @placeholder {
+      <div class="widget-placeholder">Scroll down to hydrate comments...</div>
+    }
+
+    <pre class="code-note"><code>&#64;defer (hydrate on viewport) &#123;
+  &lt;app-comments-widget /&gt;
+&#125;</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 3. hydrate on hover                                     -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="hover-heading">
+    <h2 id="hover-heading">
+      <span class="trigger-badge hover">hydrate on hover</span>
+    </h2>
+    <p class="description">
+      Hydrates when the user hovers over the component. Great for
+      secondary interactive content like dashboards.
+    </p>
+
+    @defer (hydrate on hover) {
+      <app-analytics-widget />
+    } @placeholder {
+      <div class="widget-placeholder">Hover to hydrate analytics...</div>
+    }
+
+    <pre class="code-note"><code>&#64;defer (hydrate on hover) &#123;
+  &lt;app-analytics-widget /&gt;
+&#125;</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 4. hydrate on interaction                               -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="interaction-heading">
+    <h2 id="interaction-heading">
+      <span class="trigger-badge interaction">hydrate on interaction</span>
+    </h2>
+    <p class="description">
+      Hydrates on the first user interaction (click, keydown, etc.).
+      Ideal for chat widgets or forms that only activate on engagement.
+    </p>
+
+    @defer (hydrate on interaction) {
+      <app-chat-widget />
+    } @placeholder {
+      <div class="widget-placeholder">Click or type to hydrate chat...</div>
+    }
+
+    <pre class="code-note"><code>&#64;defer (hydrate on interaction) &#123;
+  &lt;app-chat-widget /&gt;
+&#125;</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 5. hydrate on timer                                     -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="timer-heading">
+    <h2 id="timer-heading">
+      <span class="trigger-badge timer">hydrate on timer(2s)</span>
+    </h2>
+    <p class="description">
+      Hydrates after a specified delay. Useful for low-priority widgets
+      that should eventually become interactive.
+    </p>
+
+    @defer (hydrate on timer(2s)) {
+      <app-newsletter-widget />
+    } @placeholder {
+      <div class="widget-placeholder">Will hydrate in 2 seconds...</div>
+    }
+
+    <pre class="code-note"><code>&#64;defer (hydrate on timer(2s)) &#123;
+  &lt;app-newsletter-widget /&gt;
+&#125;</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- Configuration Guide                                     -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section notes-section" aria-labelledby="config-heading">
+    <h2 id="config-heading">Configuration</h2>
+    <ul class="api-notes-list">
+      <li>
+        <strong>Default in Angular 22</strong> &mdash;
+        <code>provideClientHydration()</code> now includes incremental hydration
+        automatically. No opt-in needed.
+      </li>
+      <li>
+        <strong><code>withIncrementalHydration()</code></strong> &mdash;
+        Deprecated since v22. Intent to remove in v24.
+      </li>
+      <li>
+        <strong><code>withNoIncrementalHydration()</code></strong> &mdash;
+        Use this to opt out and revert to full hydration behavior.
+      </li>
+      <li>
+        <strong>Available triggers:</strong>
+        <code>hydrate on immediate</code>,
+        <code>hydrate on viewport</code>,
+        <code>hydrate on hover</code>,
+        <code>hydrate on interaction</code>,
+        <code>hydrate on timer(ms)</code>,
+        <code>hydrate on idle</code>,
+        <code>hydrate when condition</code>,
+        <code>hydrate never</code>.
+      </li>
+      <li>
+        <strong>SSR + Event Replay</strong> &mdash;
+        Combine with <code>withEventReplay()</code> to capture user events
+        before hydration completes and replay them after.
+      </li>
+      <li>
+        <strong>TTI improvement</strong> &mdash;
+        Only the visible/needed components hydrate on load,
+        reducing JavaScript execution and improving Time to Interactive.
+      </li>
+    </ul>
+
+    <pre class="code-note"><code>// Angular 22 app.config.ts — incremental hydration is ON by default
+export const appConfig: ApplicationConfig = &#123;
+  providers: [
+    provideClientHydration(withEventReplay()),
+    // That's it! No withIncrementalHydration() needed.
+  ],
+&#125;;</code></pre>
+  </section>
+</main>

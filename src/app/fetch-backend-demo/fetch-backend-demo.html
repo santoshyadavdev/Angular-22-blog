@@ -1,0 +1,217 @@
+<main class="demo-container" aria-labelledby="demo-heading">
+  <h1 id="demo-heading"><code>FetchBackend</code> is the Default</h1>
+  <p class="subtitle">
+    Angular 22 makes <code>FetchBackend</code> the default
+    <code>HttpBackend</code>. The <code>withFetch()</code> option is
+    deprecated. Use <code>withXhr()</code> only when you need XHR-specific
+    features like upload progress reports.
+  </p>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 1. Active backend verification                          -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="backend-heading">
+    <h2 id="backend-heading">1. Active Backend</h2>
+    <p class="description">
+      Injecting <code>HttpBackend</code> and checking its constructor name
+      confirms which implementation is active.
+    </p>
+
+    <div class="backend-badge-row">
+      <span
+        class="backend-badge"
+        [class.fetch]="isFetchBackend"
+        [class.xhr]="!isFetchBackend"
+      >
+        {{ backendName }}
+      </span>
+      @if (isFetchBackend) {
+        <span class="status-text success">
+          Using the Fetch API (default in Angular 22)
+        </span>
+      } @else {
+        <span class="status-text info">
+          Using XMLHttpRequest (withXhr() is active)
+        </span>
+      }
+    </div>
+
+    <pre class="code-note"><code>// Angular 22 — withFetch() is deprecated, fetch is default
+provideHttpClient()
+
+// Only add withXhr() if you need upload progress
+provideHttpClient(withXhr())</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 2. httpResource with FetchBackend                       -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="resource-heading">
+    <h2 id="resource-heading">2. <code>httpResource</code> with Fetch</h2>
+    <p class="description">
+      <code>httpResource()</code> uses the default <code>FetchBackend</code>
+      under the hood. Browse users from the JSONPlaceholder API.
+    </p>
+
+    <div class="user-card">
+      @if (userResource.isLoading()) {
+        <div class="loading-state" role="status">Loading user...</div>
+      } @else if (userResource.value(); as user) {
+        <div class="user-info">
+          <h3 class="user-name">{{ user.name }}</h3>
+          <div class="user-details">
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Phone:</strong> {{ user.phone }}</p>
+            <p><strong>Website:</strong> {{ user.website }}</p>
+            <p><strong>Company:</strong> {{ user.company.name }}</p>
+          </div>
+        </div>
+      } @else if (userResource.error(); as err) {
+        <div class="error-state" role="alert">Failed to load user</div>
+      }
+    </div>
+
+    <div class="nav-controls">
+      <button type="button" class="btn" (click)="prevUser()">
+        &larr; Previous
+      </button>
+      <span class="user-id-badge">User #{{ userId() }}</span>
+      <button type="button" class="btn" (click)="nextUser()">
+        Next &rarr;
+      </button>
+    </div>
+
+    <pre class="code-note"><code>userId = signal(1);
+
+userResource = httpResource&lt;User&gt;(
+  () => \`https://api.example.com/users/\$&#123;this.userId()&#125;\`
+);
+
+// Reactively updates when userId() changes — powered by FetchBackend</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 3. HttpClient.get — response headers via Fetch          -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="manual-heading">
+    <h2 id="manual-heading">3. <code>HttpClient</code> with Full Response</h2>
+    <p class="description">
+      Traditional <code>HttpClient.get()</code> now runs through
+      <code>FetchBackend</code> by default. Response headers and status
+      codes work the same way.
+    </p>
+
+    <button
+      type="button"
+      class="btn"
+      (click)="fetchManually()"
+      [class.loading]="manualLoading()"
+    >
+      @if (manualLoading()) {
+        Fetching...
+      } @else {
+        Fetch Post #1
+      }
+    </button>
+
+    @if (manualResult(); as result) {
+      <div class="response-card">
+        <div class="response-meta">
+          <span class="status-badge">{{ result.status }}</span>
+          <span class="content-type">{{ result.contentType }}</span>
+        </div>
+        <pre><code>{{ result.body | json }}</code></pre>
+      </div>
+    }
+
+    @if (manualError()) {
+      <p class="error-text" role="alert">{{ manualError() }}</p>
+    }
+
+    <pre class="code-note"><code>// Works exactly the same — but now uses Fetch API internally
+this.http.get('/api/posts/1', &#123; observe: 'response' &#125;)
+  .subscribe(response => &#123;
+    response.status;                          // 200
+    response.headers.get('content-type');     // application/json
+    response.body;                            // parsed JSON
+  &#125;);</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 4. Upload progress — XHR-only feature                   -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="upload-heading">
+    <h2 id="upload-heading">4. Upload Progress (XHR Only)</h2>
+    <p class="description">
+      The Fetch API does not support upload progress events.
+      If your app needs <code>reportProgress: true</code> for uploads,
+      switch to <code>provideHttpClient(withXhr())</code>.
+    </p>
+
+    <button type="button" class="btn" (click)="simulateUpload()">
+      Simulate Upload
+    </button>
+
+    @if (uploadProgress() !== null) {
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div
+            class="progress-fill"
+            [style.width.%]="uploadProgress()"
+            role="progressbar"
+            [attr.aria-valuenow]="uploadProgress()"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          ></div>
+        </div>
+        <span class="progress-text">{{ uploadProgress() }}%</span>
+      </div>
+      <p class="upload-status">{{ uploadStatus() }}</p>
+    }
+
+    <pre class="code-note"><code>// To enable real upload progress, use withXhr():
+// app.config.ts
+provideHttpClient(withXhr())
+
+// Then in your component:
+this.http.post('/api/upload', formData, &#123;
+  reportProgress: true,
+  observe: 'events',
+&#125;).subscribe(event => &#123;
+  if (event.type === HttpEventType.UploadProgress) &#123;
+    const pct = Math.round(100 * event.loaded / (event.total ?? 1));
+  &#125;
+&#125;);</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- Migration guide                                         -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section notes-section" aria-labelledby="migration-heading">
+    <h2 id="migration-heading">Migration Guide</h2>
+    <ul class="api-notes-list">
+      <li>
+        <strong>Remove <code>withFetch()</code></strong> &mdash;
+        It's deprecated. <code>provideHttpClient()</code> already uses
+        <code>FetchBackend</code> by default.
+      </li>
+      <li>
+        <strong>No code changes needed</strong> &mdash;
+        <code>HttpClient</code> API is the same. Only the underlying
+        transport changed from XMLHttpRequest to the Fetch API.
+      </li>
+      <li>
+        <strong>Upload progress?</strong> &mdash;
+        Add <code>withXhr()</code> if you need
+        <code>reportProgress: true</code> for uploads.
+        Download progress still works with <code>FetchBackend</code>.
+      </li>
+      <li>
+        <strong>SSR compatible</strong> &mdash;
+        <code>FetchBackend</code> works in both browser and server
+        environments. Do <strong>not</strong> use <code>withXhr()</code>
+        in SSR.
+      </li>
+    </ul>
+  </section>
+</main>

@@ -1,0 +1,18 @@
+.app-nav {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #f8f8fc;
+  border-bottom: 1px solid #e5e5ea;
+}
+
+.app-nav a {
+  color: #6366f1;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.app-nav a:hover {
+  text-decoration: underline;
+}

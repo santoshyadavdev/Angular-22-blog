@@ -1,0 +1,237 @@
+:host {
+  display: block;
+}
+
+.demo-container {
+  max-width: 680px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: #1a1a2e;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+h2 code {
+  background: #f0f0f5;
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+h3.sub-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1rem 0 0.25rem;
+}
+
+.subtitle {
+  color: #555;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.subtitle code {
+  background: #f0f0f5;
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+.demo-section {
+  margin-bottom: 2.5rem;
+  padding: 1.25rem;
+  background: #fafafe;
+  border: 1px solid #e5e5ea;
+  border-radius: 10px;
+}
+
+.description {
+  color: #555;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.description code {
+  background: #eef;
+  padding: 0.05em 0.25em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Button row */
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+/* Make the progress spinner visible on colored buttons */
+:host ::ng-deep .mat-mdc-unelevated-button .mat-mdc-progress-spinner circle,
+:host ::ng-deep .mat-mdc-raised-button .mat-mdc-progress-spinner circle {
+  stroke: #fff !important;
+}
+
+:host ::ng-deep .mat-mdc-outlined-button .mat-mdc-progress-spinner circle {
+  stroke: #7d00fa !important;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: #888;
+  margin: 0.5rem 0 0;
+}
+
+/* Dialog section */
+.input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.input-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.text-input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-family: inherit;
+  min-width: 180px;
+}
+
+.text-input:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: 1px;
+  border-color: #6366f1;
+}
+
+/* Tab animation mode buttons */
+.mode-btn {
+  padding: 0.45rem 0.9rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 0.82rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.mode-btn:hover {
+  background: #f3f4f6;
+}
+
+.mode-btn:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.mode-btn.active {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
+}
+
+/* Tab content */
+.tab-content {
+  padding: 1rem 0.5rem;
+  font-size: 0.88rem;
+  color: #444;
+}
+
+/* ARIA list */
+.aria-list {
+  margin: 0.5rem 0 1rem;
+  padding-left: 1.25rem;
+  font-size: 0.88rem;
+  line-height: 1.8;
+}
+
+.aria-list code {
+  background: #eef;
+  padding: 0.05em 0.3em;
+  border-radius: 3px;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+/* Code snippet blocks */
+.code-note {
+  margin: 0.75rem 0 0;
+  padding: 0.6rem 0.75rem;
+  background: #f0f0f5;
+  border-radius: 6px;
+  border-left: 3px solid #c7d2fe;
+  overflow-x: auto;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.code-note code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  white-space: pre;
+}
+/* Migration cards */
+.migration-card {
+  background: #fff;
+  border: 1px solid #e5e5ea;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.migration-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.82rem;
+  border-bottom: 1px solid #f0f0f5;
+  flex-wrap: wrap;
+}
+
+.migration-row:last-child { border-bottom: none; }
+
+.badge-before {
+  padding: 0.1em 0.45em;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  min-width: 42px;
+  text-align: center;
+}
+
+.badge-after {
+  padding: 0.1em 0.45em;
+  background: #dcfce7;
+  color: #166534;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  min-width: 42px;
+  text-align: center;
+}
+
+.strike { text-decoration: line-through; color: #991b1b; }
+.added { color: #166534; font-weight: 600; }

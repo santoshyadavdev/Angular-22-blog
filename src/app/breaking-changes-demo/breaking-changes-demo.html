@@ -1,0 +1,261 @@
+<main class="demo-container" aria-labelledby="demo-heading">
+  <h1 id="demo-heading">Breaking Changes in Angular 22</h1>
+  <p class="subtitle">
+    Angular 22 removes several deprecated APIs. Here's what changed and how
+    to migrate your code.
+  </p>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 1. ComponentFactoryResolver removed                     -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="factory-heading">
+    <h2 id="factory-heading">
+      <span class="removed-badge">Removed</span>
+      <code>ComponentFactoryResolver</code> &amp; <code>ComponentFactory</code>
+    </h2>
+    <p class="description">
+      You no longer need a factory to create components dynamically.
+      Pass the component class directly to <code>ViewContainerRef.createComponent()</code>
+      or use the standalone <code>createComponent()</code> function.
+    </p>
+
+    <div class="migration-card">
+      <div class="migration-header">
+        <span class="badge before">Before (Angular &le;21)</span>
+        <span class="arrow">&rarr;</span>
+        <span class="badge after">After (Angular 22)</span>
+      </div>
+      <div class="migration-grid">
+        <div class="migration-old">
+          <code class="highlight-removed">ComponentFactoryResolver</code>
+          <p>Inject resolver, create factory, then create component</p>
+        </div>
+        <div class="migration-new">
+          <code class="highlight-added">vcr.createComponent(MyComponent)</code>
+          <p>Pass the class directly — no factory needed</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="interactive-section">
+      <p class="try-label">Try it — create a component without a factory:</p>
+      <button
+        type="button"
+        class="btn"
+        (click)="createDynamicComponent()"
+        [attr.aria-disabled]="dynamicCreated()"
+        [class.disabled]="dynamicCreated()"
+      >
+        @if (dynamicCreated()) {
+          Component Created!
+        } @else {
+          vcr.createComponent(DynamicGreeting)
+        }
+      </button>
+    </div>
+
+    <pre class="code-note"><code>{{ factoryCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 2. ChangeDetectorRef.checkNoChanges removed             -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="check-heading">
+    <h2 id="check-heading">
+      <span class="removed-badge">Removed</span>
+      <code>ChangeDetectorRef.checkNoChanges()</code>
+    </h2>
+    <p class="description">
+      This method was removed from <code>ChangeDetectorRef</code>.
+      In tests, use <code>fixture.detectChanges()</code> instead.
+      Angular's dev mode already performs change detection checks automatically.
+    </p>
+
+    <div class="migration-card">
+      <div class="migration-header">
+        <span class="badge before">Before</span>
+        <span class="arrow">&rarr;</span>
+        <span class="badge after">After</span>
+      </div>
+      <div class="migration-grid">
+        <div class="migration-old">
+          <code class="highlight-removed">fixture.changeDetectorRef.checkNoChanges()</code>
+        </div>
+        <div class="migration-new">
+          <code class="highlight-added">fixture.detectChanges()</code>
+        </div>
+      </div>
+    </div>
+
+    <pre class="code-note"><code>{{ checkNoChangesCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 3. createNgModuleRef removed                            -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="module-heading">
+    <h2 id="module-heading">
+      <span class="removed-badge">Removed</span>
+      <code>createNgModuleRef()</code>
+    </h2>
+    <p class="description">
+      Renamed to <code>createNgModule()</code>. The function signature is
+      identical — just update the import name.
+    </p>
+
+    <div class="migration-card">
+      <div class="migration-header">
+        <span class="badge before">Before</span>
+        <span class="arrow">&rarr;</span>
+        <span class="badge after">After</span>
+      </div>
+      <div class="migration-grid">
+        <div class="migration-old">
+          <code class="highlight-removed">createNgModuleRef(Module, injector)</code>
+        </div>
+        <div class="migration-new">
+          <code class="highlight-added">createNgModule(Module, injector)</code>
+        </div>
+      </div>
+    </div>
+
+    <pre class="code-note"><code>{{ ngModuleRefCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 4. appRef.bootstrap stricter typing                     -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="bootstrap-heading">
+    <h2 id="bootstrap-heading">
+      <span class="stricter-badge">Stricter</span>
+      <code>appRef.bootstrap()</code> Typing
+    </h2>
+    <p class="description">
+      The second argument of <code>appRef.bootstrap()</code> no longer accepts
+      <code>any</code>. The element must be non-nullable — use a null check or
+      the non-null assertion operator.
+    </p>
+
+    <div class="migration-card">
+      <div class="migration-header">
+        <span class="badge before">Before (accepted any)</span>
+        <span class="arrow">&rarr;</span>
+        <span class="badge after">After (non-nullable)</span>
+      </div>
+      <div class="migration-grid">
+        <div class="migration-old">
+          <code class="highlight-removed">appRef.bootstrap(Comp, getElementById('root'))</code>
+          <p>No error even if <code>getElementById</code> returns <code>null</code></p>
+        </div>
+        <div class="migration-new">
+          <code class="highlight-added">appRef.bootstrap(Comp, el!)</code>
+          <p>Must ensure the element is non-nullable</p>
+        </div>
+      </div>
+    </div>
+
+    <pre class="code-note"><code>{{ bootstrapCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 5. Style Cleanup on Component Destroy                   -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="style-cleanup-heading">
+    <h2 id="style-cleanup-heading">
+      <span class="changed-badge">Changed</span>
+      Style Cleanup on Component Destroy
+    </h2>
+    <p class="description">
+      Angular 22 removes <code>&lt;style&gt;</code> tags from the DOM when their
+      host component is destroyed. Previously, styles persisted in
+      <code>&lt;head&gt;</code> forever, potentially leaking to unrelated elements.
+    </p>
+
+    <div class="style-demo-area">
+      <div class="style-demo-controls">
+        <button type="button" class="btn" (click)="toggleStyledCard()">
+          @if (showStyledCard()) {
+            Destroy Component
+          } @else {
+            Create Component
+          }
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="countStyleTags()">
+          Count &lt;style&gt; Tags
+        </button>
+        <span class="style-count">
+          <code>&lt;style&gt;</code> tags in DOM: <strong>{{ styleTagCount() }}</strong>
+        </span>
+      </div>
+
+      <div class="style-demo-output">
+        @if (showStyledCard()) {
+          <app-styled-card />
+        } @else {
+          <div class="destroyed-placeholder">
+            <p>Component destroyed — its <code>&lt;style&gt;</code> tag was
+            removed from <code>&lt;head&gt;</code>.</p>
+            <p class="hint">Click "Count &lt;style&gt; Tags" to verify the count dropped.</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="migration-card">
+      <div class="migration-header">
+        <span class="badge before">Before (Angular &le;21)</span>
+        <span class="arrow">&rarr;</span>
+        <span class="badge after">After (Angular 22)</span>
+      </div>
+      <div class="migration-grid">
+        <div class="migration-old">
+          <p>Component destroyed &rarr; <code>&lt;style&gt;</code> stays in DOM</p>
+          <p>Styles can leak to other elements</p>
+        </div>
+        <div class="migration-new">
+          <p>Component destroyed &rarr; <code>&lt;style&gt;</code> removed</p>
+          <p>Clean DOM, no style leaks</p>
+        </div>
+      </div>
+    </div>
+
+    <pre class="code-note"><code>{{ styleCleanupCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- Quick Reference Table                                   -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section notes-section" aria-labelledby="summary-heading">
+    <h2 id="summary-heading">Quick Migration Reference</h2>
+    <div class="summary-table">
+      <div class="table-row header">
+        <span>Removed / Changed</span>
+        <span>Replacement</span>
+      </div>
+      <div class="table-row">
+        <code>ComponentFactoryResolver</code>
+        <span>Pass class directly to <code>createComponent()</code></span>
+      </div>
+      <div class="table-row">
+        <code>ComponentFactory</code>
+        <span>No longer needed</span>
+      </div>
+      <div class="table-row">
+        <code>ChangeDetectorRef.checkNoChanges()</code>
+        <span><code>fixture.detectChanges()</code> in tests</span>
+      </div>
+      <div class="table-row">
+        <code>createNgModuleRef()</code>
+        <span><code>createNgModule()</code></span>
+      </div>
+      <div class="table-row">
+        <code>appRef.bootstrap(Comp, any)</code>
+        <span><code>appRef.bootstrap(Comp, nonNullableEl)</code></span>
+      </div>
+      <div class="table-row">
+        <code>Styles persist after destroy</code>
+        <span>Styles now <code>removed from DOM</code> on destroy</span>
+      </div>
+    </div>
+  </section>
+</main>

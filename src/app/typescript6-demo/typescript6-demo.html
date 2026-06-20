@@ -1,0 +1,185 @@
+<section class="container">
+  <h2>TypeScript 6.0 Features in Angular 22</h2>
+  <p class="subtitle">Exploring the key changes in TypeScript's bridge release to the native Go-based TS 7.0</p>
+
+  <!-- Section 1: strict by default -->
+  <div class="demo-section">
+    <h3>1. <code>strict: true</code> by Default</h3>
+    <p class="description">
+      TypeScript 6.0 enables <code>strict</code> mode by default in new projects. Previously, you had to
+      explicitly opt in to strict checking with <code>"strict": true</code> in your tsconfig. Now all strict
+      family flags — <code>strictNullChecks</code>, <code>strictFunctionTypes</code>,
+      <code>strictBindCallApply</code>, <code>noImplicitAny</code>, and more — are on unless you explicitly
+      disable them.
+    </p>
+    <div class="info-box">
+      Angular CLI projects already defaulted to <code>strict: true</code>, so this change mainly
+      aligns the broader TypeScript ecosystem with Angular's existing best practice.
+    </div>
+    <pre class="code-note"><code>{{ strictCode }}</code></pre>
+  </div>
+
+  <!-- Section 2: Temporal API -->
+  <div class="demo-section">
+    <h3>2. Temporal API Types</h3>
+    <p class="description">
+      TypeScript 6.0 ships built-in type definitions for the <strong>Temporal API</strong>, the modern
+      replacement for <code>Date</code>. Temporal provides immutable, timezone-aware date/time objects
+      with a clear, unambiguous API.
+    </p>
+
+    @if (temporalAvailable()) {
+      <div class="result-box">
+        <div class="result-row">
+          <span class="label">Current instant:</span>
+          <span class="value">{{ currentInstant() }}</span>
+        </div>
+        <div class="result-row">
+          <span class="label">PlainDate (2026-01-01):</span>
+          <span class="value">{{ plainDate() }}</span>
+        </div>
+        <div class="result-row">
+          <span class="label">Days since 2026-01-01:</span>
+          <span class="value">{{ daysBetween() }}</span>
+        </div>
+      </div>
+
+      <div class="interactive-area">
+        <label for="target-date">Pick a date to calculate days until:</label>
+        <div class="input-row">
+          <input
+            id="target-date"
+            type="date"
+            [ngModel]="targetDate()"
+            (ngModelChange)="targetDate.set($event)"
+          />
+          <button class="btn" (click)="calculateDaysUntil()">Calculate</button>
+        </div>
+        @if (daysUntilTarget(); as result) {
+          <div class="result-inline">
+            Days until target: <strong>{{ result }}</strong>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="fallback-box">
+        Temporal API is not available in this runtime. TypeScript 6.0 provides the
+        <em>type definitions</em>, but the runtime implementation depends on browser/Node.js support.
+      </div>
+    }
+
+    <pre class="code-note"><code>{{ temporalCode }}</code></pre>
+  </div>
+
+  <!-- Section 3: Map.getOrInsert -->
+  <div class="demo-section">
+    <h3>3. <code>Map.getOrInsert()</code> / <code>getOrInsertComputed()</code></h3>
+    <p class="description">
+      New <code>Map</code> methods that atomically get an existing value or insert a default.
+      <code>getOrInsert(key, default)</code> uses a static default value, while
+      <code>getOrInsertComputed(key, fn)</code> lazily computes it. This eliminates the common
+      "check-then-set" pattern.
+    </p>
+
+    <div class="interactive-area">
+      <label for="word-input">Enter text to count word frequencies:</label>
+      <textarea
+        id="word-input"
+        rows="3"
+        [ngModel]="wordInput()"
+        (ngModelChange)="wordInput.set($event)"
+      ></textarea>
+      <button class="btn" (click)="countWords()">Count Words</button>
+    </div>
+
+    @if (wordFrequencies().length > 0) {
+      <div class="result-box">
+        <div class="freq-list">
+          @for (entry of wordFrequencies(); track entry[0]) {
+            <span class="freq-item">
+              <code>{{ entry[0] }}</code>
+              <span class="freq-count">{{ entry[1] }}</span>
+            </span>
+          }
+        </div>
+      </div>
+    }
+
+    <pre class="code-note"><code>{{ getOrInsertCode }}</code></pre>
+  </div>
+
+  <!-- Section 4: RegExp.escape -->
+  <div class="demo-section">
+    <h3>4. <code>RegExp.escape()</code></h3>
+    <p class="description">
+      Safely escapes special regular expression characters in a string. Essential when building
+      regex patterns from user input — no more hand-rolled escape functions.
+    </p>
+
+    @if (regexpEscapeAvailable()) {
+      <div class="interactive-area">
+        <label for="search-term">Search term (try special chars like <code>$</code> <code>.</code> <code>(</code>):</label>
+        <input
+          id="search-term"
+          type="text"
+          [ngModel]="searchTerm()"
+          (ngModelChange)="onSearchTermChange($event)"
+        />
+
+        <div class="result-box">
+          <div class="result-row">
+            <span class="label">Escaped:</span>
+            <code class="value">{{ escapedTerm() }}</code>
+          </div>
+          <div class="result-row">
+            <span class="label">Matches in text:</span>
+          </div>
+          <div class="highlighted-text" [innerHTML]="highlightedText()"></div>
+        </div>
+      </div>
+    } @else {
+      <div class="fallback-box">
+        <code>RegExp.escape()</code> is not available in this runtime yet. TypeScript 6.0 provides
+        the type definitions for this TC39 Stage 4 proposal.
+      </div>
+    }
+
+    <pre class="code-note"><code>{{ regexpEscapeCode }}</code></pre>
+  </div>
+
+  <!-- Section 5: New Defaults Summary -->
+  <div class="demo-section">
+    <h3>5. New Defaults Summary</h3>
+    <p class="description">
+      TypeScript 6.0 is the <strong>bridge release</strong> preparing the ecosystem for TypeScript 7.0,
+      which will be rewritten in Go for dramatically faster compilation. TS 6.0 modernizes the default
+      compiler options so new projects start with sensible, modern settings.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Setting</th>
+            <th>Old Default (TS 5.x)</th>
+            <th>New Default (TS 6.0)</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of defaultsTable; track row.setting) {
+            <tr>
+              <td><code>{{ row.setting }}</code></td>
+              <td>{{ row.oldDefault }}</td>
+              <td><strong>{{ row.newDefault }}</strong></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-box">
+      These new defaults only affect projects that don't explicitly set these options.
+      Existing projects with explicit settings in <code>tsconfig.json</code> are unaffected.
+    </div>
+  </div>
+</section>

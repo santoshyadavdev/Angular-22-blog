@@ -1,0 +1,267 @@
+<main class="demo-container" aria-labelledby="demo-heading">
+  <h1 id="demo-heading"><code>injectAsync</code> — Lazy DI</h1>
+  <p class="subtitle">
+    Angular 22 introduces <code>injectAsync()</code> for asynchronous dependency
+    injection. Services are loaded only when needed, keeping the initial bundle
+    small. Combine with <code>onIdle</code> to prefetch during idle time.
+  </p>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 1. Basic injectAsync — on-demand loading                -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="basic-heading">
+    <h2 id="basic-heading">1. On-Demand Loading</h2>
+    <p class="description">
+      <code>AnalyticsService</code> is not in the initial bundle. It's loaded
+      the first time you click a tracking button. Subsequent calls reuse the
+      already-loaded service.
+    </p>
+
+    <div class="btn-group">
+      <button
+        type="button"
+        class="btn"
+        (click)="trackEvent('page_view')"
+        [class.loading]="analyticsLoading()"
+        [attr.aria-disabled]="analyticsLoading()"
+      >
+        @if (analyticsLoading()) {
+          Loading...
+        } @else {
+          Track Page View
+        }
+      </button>
+      <button
+        type="button"
+        class="btn"
+        (click)="trackEvent('button_click')"
+        [class.loading]="analyticsLoading()"
+        [attr.aria-disabled]="analyticsLoading()"
+      >
+        Track Click
+      </button>
+      <button
+        type="button"
+        class="btn"
+        (click)="trackEvent('scroll_depth')"
+        [class.loading]="analyticsLoading()"
+        [attr.aria-disabled]="analyticsLoading()"
+      >
+        Track Scroll
+      </button>
+    </div>
+
+    @if (analyticsLoaded()) {
+      <span class="badge loaded">Service loaded</span>
+    }
+
+    @if (analyticsLog().length > 0) {
+      <ul class="event-log" aria-label="Analytics event log">
+        @for (entry of analyticsLog(); track $index) {
+          <li>{{ entry }}</li>
+        }
+      </ul>
+    }
+
+    <pre class="code-note"><code>private loadAnalytics = injectAsync(
+  () => import('./services/analytics.service')
+           .then(m => m.AnalyticsService)
+);
+
+async trackEvent(name: string) &#123;
+  const analytics = await this.loadAnalytics();
+  analytics.trackEvent(name);
+&#125;</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 2. Default export — auto-unwrapped by injectAsync       -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="default-heading">
+    <h2 id="default-heading">2. Default Export Support</h2>
+    <p class="description">
+      <code>MarkdownRendererService</code> uses <code>export default</code>.
+      <code>injectAsync()</code> automatically unwraps it &mdash; no
+      <code>.then(m =&gt; m.default)</code> needed.
+    </p>
+
+    <div class="markdown-editor">
+      <div class="editor-pane">
+        <label for="md-input">Markdown Input</label>
+        <textarea
+          id="md-input"
+          rows="5"
+          [value]="markdownInput()"
+          (input)="updateMarkdown(mdInput.value)"
+          #mdInput
+        ></textarea>
+      </div>
+      <div class="preview-pane">
+        <div class="preview-header">
+          <span>Preview</span>
+          @if (markdownLoaded()) {
+            <span class="badge loaded">Service loaded</span>
+          }
+        </div>
+        @if (renderedHtml()) {
+          <div class="preview-content" [innerHTML]="renderedHtml()"></div>
+        } @else {
+          <p class="placeholder">Click "Render" to load the service and preview.</p>
+        }
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="btn"
+      (click)="renderMarkdown()"
+      [class.loading]="markdownLoading()"
+      [attr.aria-disabled]="markdownLoading()"
+    >
+      @if (markdownLoading()) {
+        Loading renderer...
+      } @else if (markdownLoaded()) {
+        Re-render
+      } @else {
+        Render Markdown
+      }
+    </button>
+
+    <pre class="code-note"><code>// MarkdownRendererService uses `export default`
+private loadMarkdown = injectAsync(
+  () => import('./services/markdown-renderer.service')
+);
+// No .then(m => m.default) needed!</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 3. Prefetch with onIdle                                 -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="prefetch-heading">
+    <h2 id="prefetch-heading">3. Prefetch with <code>onIdle</code></h2>
+    <p class="description">
+      <code>PdfExportService</code> is prefetched when the browser is idle
+      using <code>&#123; prefetch: onIdle &#125;</code>.
+      By the time you click "Export", the service is likely already loaded
+      &mdash; resulting in near-instant execution.
+    </p>
+
+    <button
+      type="button"
+      class="btn btn-accent"
+      (click)="exportPdf()"
+      [class.loading]="pdfLoading()"
+      [attr.aria-disabled]="pdfLoading()"
+    >
+      @if (pdfLoading()) {
+        Exporting...
+      } @else {
+        Export as PDF
+      }
+    </button>
+
+    @if (pdfExported()) {
+      <div class="export-result">
+        <span class="badge loaded">Service loaded (likely prefetched!)</span>
+        <p class="result-text">{{ pdfResult() }}</p>
+      </div>
+    }
+
+    <pre class="code-note"><code>private loadPdfExport = injectAsync(
+  () => import('./services/pdf-export.service')
+           .then(m => m.PdfExportService),
+  &#123; prefetch: onIdle &#125;  // loads when browser is idle
+);</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 4. @Service vs @Injectable                              -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="service-heading">
+    <h2 id="service-heading">4. <code>&#64;Service()</code> vs <code>&#64;Injectable()</code></h2>
+    <p class="description">
+      Angular 22 introduces <code>&#64;Service()</code> as a simpler alternative
+      to <code>&#64;Injectable(&#123; providedIn: 'root' &#125;)</code>.
+      It's auto-provided by default and enables lazy loading via
+      <code>injectAsync()</code>.
+    </p>
+
+    <div class="comparison-table">
+      <div class="comp-row comp-header">
+        <span></span>
+        <span><code>&#64;Injectable()</code></span>
+        <span><code>&#64;Service()</code></span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">Auto-provided</span>
+        <span>Only with <code>providedIn: 'root'</code></span>
+        <span class="check">Yes (default)</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">Lazy loading</span>
+        <span class="cross">Not supported</span>
+        <span class="check">Via <code>injectAsync()</code></span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">Custom factory</span>
+        <span>Via <code>useFactory</code> in providers</span>
+        <span class="check"><code>factory</code> option</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">Scoped (not global)</span>
+        <span><code>providedIn: 'any'</code> etc.</span>
+        <span><code>autoProvided: false</code></span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">Boilerplate</span>
+        <span class="cross"><code>&#64;Injectable(&#123; providedIn: 'root' &#125;)</code></span>
+        <span class="check"><code>&#64;Service()</code></span>
+      </div>
+    </div>
+
+    <h3>Basic Comparison</h3>
+    <pre class="code-note"><code>{{ serviceVsInjectableCode }}</code></pre>
+
+    <h3><code>&#64;Service()</code> Options</h3>
+    <pre class="code-note"><code>{{ serviceOptionsCode }}</code></pre>
+
+    <h3>Lazy Loading (&#64;Service only)</h3>
+    <pre class="code-note"><code>{{ lazyServiceCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- How it works                                             -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section notes-section" aria-labelledby="notes-heading">
+    <h2 id="notes-heading">How <code>injectAsync</code> Works</h2>
+    <ul class="api-notes-list">
+      <li>
+        <strong>Lazy by default</strong> &mdash;
+        The service module is not included in the initial bundle. It's fetched
+        over the network on first use.
+      </li>
+      <li>
+        <strong><code>@Service()</code></strong> &mdash;
+        New Angular 22 decorator. Auto-provides the service (like
+        <code>&#64;Injectable(&#123; providedIn: 'root' &#125;)</code>) and
+        enables lazy loading via <code>injectAsync()</code>.
+      </li>
+      <li>
+        <strong>Default export</strong> &mdash;
+        <code>injectAsync()</code> auto-unwraps <code>export default</code>
+        classes, so you don't need <code>.then(m =&gt; m.default)</code>.
+      </li>
+      <li>
+        <strong><code>prefetch: onIdle</code></strong> &mdash;
+        Eagerly loads the service when the browser is idle via
+        <code>requestIdleCallback</code>. The service is ready before the
+        user requests it.
+      </li>
+      <li>
+        <strong>Singleton</strong> &mdash;
+        The resolved service is cached. Subsequent <code>await</code> calls
+        return the same instance instantly.
+      </li>
+    </ul>
+  </section>
+</main>

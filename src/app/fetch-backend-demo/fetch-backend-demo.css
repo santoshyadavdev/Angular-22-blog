@@ -1,0 +1,307 @@
+:host {
+  display: block;
+}
+
+.demo-container {
+  max-width: 680px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: #1a1a2e;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+h1 code,
+h2 code {
+  background: #f0f0f5;
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.subtitle {
+  color: #555;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.subtitle code {
+  background: #f0f0f5;
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+.demo-section {
+  margin-bottom: 2.5rem;
+  padding: 1.25rem;
+  background: #fafafe;
+  border: 1px solid #e5e5ea;
+  border-radius: 10px;
+}
+
+.description {
+  color: #555;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.description code {
+  background: #eef;
+  padding: 0.05em 0.25em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Backend badge */
+.backend-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.backend-badge {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.backend-badge.fetch {
+  background: #dcfce7;
+  color: #166534;
+  border: 1.5px solid #86efac;
+}
+
+.backend-badge.xhr {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1.5px solid #93c5fd;
+}
+
+.status-text {
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.status-text.success {
+  color: #16a34a;
+}
+
+.status-text.info {
+  color: #2563eb;
+}
+
+/* User card */
+.user-card {
+  background: #fff;
+  border: 1px solid #e5e5ea;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  min-height: 120px;
+}
+
+.loading-state {
+  color: #d97706;
+  font-style: italic;
+  padding: 1rem 0;
+}
+
+.error-state {
+  color: #e53e3e;
+  font-weight: 500;
+}
+
+.user-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  color: #1a1a2e;
+}
+
+.user-details p {
+  margin: 0.2rem 0;
+  font-size: 0.88rem;
+  color: #444;
+}
+
+.user-details strong {
+  color: #1a1a2e;
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-id-badge {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #6366f1;
+  min-width: 70px;
+  text-align: center;
+}
+
+/* Response card */
+.response-card {
+  margin-top: 0.75rem;
+  background: #fff;
+  border: 1px solid #e5e5ea;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.response-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: #f8f8fc;
+  border-bottom: 1px solid #e5e5ea;
+}
+
+.status-badge {
+  background: #dcfce7;
+  color: #166534;
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.content-type {
+  font-size: 0.78rem;
+  color: #888;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.response-card pre {
+  margin: 0;
+  padding: 0.75rem;
+  font-size: 0.78rem;
+  overflow-x: auto;
+  max-height: 200px;
+}
+
+.error-text {
+  color: #e53e3e;
+  font-weight: 500;
+  font-size: 0.88rem;
+}
+
+/* Progress bar */
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 12px;
+  background: #e5e5ea;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #6366f1;
+  border-radius: 6px;
+  transition: width 0.2s ease;
+}
+
+.progress-text {
+  font-weight: 700;
+  font-size: 0.88rem;
+  min-width: 40px;
+  color: #6366f1;
+}
+
+.upload-status {
+  font-size: 0.82rem;
+  color: #555;
+  margin-top: 0.35rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.55rem 1.1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #6366f1;
+  color: #fff;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.btn:hover {
+  background: #4f46e5;
+}
+
+.btn:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.btn.loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* Notes */
+.notes-section {
+  background: #f8f8fc;
+}
+
+.api-notes-list {
+  font-size: 0.85rem;
+  color: #555;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.api-notes-list code {
+  background: #eef;
+  padding: 0.05em 0.3em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Code note */
+.code-note {
+  margin: 0.75rem 0 0;
+  padding: 0.6rem 0.75rem;
+  background: #f0f0f5;
+  border-radius: 6px;
+  border-left: 3px solid #c7d2fe;
+  overflow-x: auto;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.code-note code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}

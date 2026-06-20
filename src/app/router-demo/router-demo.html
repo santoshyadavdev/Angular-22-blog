@@ -1,0 +1,208 @@
+<main class="demo-container" aria-labelledby="demo-heading">
+  <h1 id="demo-heading">Router Improvements</h1>
+  <p class="subtitle">
+    Angular 22 updates the router with inherited params by default,
+    <code>withComponentInputBinding</code> options, and
+    <code>browserUrl</code> on router links.
+  </p>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 1. paramsInheritanceStrategy defaults to 'always'       -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="params-heading">
+    <h2 id="params-heading">1. Params Inherited by Default</h2>
+    <p class="description">
+      <code>paramsInheritanceStrategy</code> now defaults to
+      <code>'always'</code>. Child routes automatically receive parameters
+      from all parent routes without any configuration.
+    </p>
+
+    <div class="route-nav">
+      <span class="nav-label">Navigate to:</span>
+      <a [routerLink]="['/router-demo/teams', '1', 'members', '1']"
+         [queryParams]="{tab: 'overview'}"
+         class="route-btn">
+        Team 1 / Member 1
+      </a>
+      <a [routerLink]="['/router-demo/teams', '2', 'members', '3']"
+         [queryParams]="{tab: 'settings'}"
+         class="route-btn">
+        Team 2 / Member 3
+      </a>
+      <a [routerLink]="['/router-demo/teams', '3', 'members', '5']"
+         [queryParams]="{tab: 'activity'}"
+         class="route-btn">
+        Team 3 / Member 5
+      </a>
+    </div>
+
+    <div class="outlet-container">
+      <router-outlet />
+    </div>
+
+    <pre class="code-note"><code>{{ paramsCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 2. withComponentInputBinding options                    -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="binding-heading">
+    <h2 id="binding-heading">2. <code>withComponentInputBinding</code> Options</h2>
+    <p class="description">
+      The <code>withComponentInputBinding()</code> feature now accepts an
+      <code>options</code> parameter with <code>unmatchedInputBehavior</code>
+      and <code>queryParams</code> controls.
+    </p>
+
+    <div class="options-table">
+      <div class="option-row header">
+        <span>Option</span>
+        <span>Values</span>
+        <span>Description</span>
+      </div>
+      <div class="option-row">
+        <code>queryParams</code>
+        <span><code>true</code> (default) / <code>false</code></span>
+        <span>Whether query params bind to component inputs</span>
+      </div>
+      <div class="option-row">
+        <code>unmatchedInputBehavior</code>
+        <span><code>'alwaysUndefined'</code> (default)</span>
+        <span>Unmatched inputs always get <code>undefined</code></span>
+      </div>
+      <div class="option-row">
+        <code>unmatchedInputBehavior</code>
+        <span><code>'undefinedIfStale'</code></span>
+        <span>Only sets <code>undefined</code> if the input was previously set by the router</span>
+      </div>
+    </div>
+
+    <pre class="code-note"><code>{{ bindingCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 3. browserUrl on router links                           -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="browser-url-heading">
+    <h2 id="browser-url-heading">3. <code>browserUrl</code> on Router Links</h2>
+
+    <app-browser-url-section />
+
+    <pre class="code-note"><code>{{ browserUrlCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 4. provideRoutes() removed                              -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="provide-routes-heading">
+    <h2 id="provide-routes-heading">
+      4. <span class="removed-badge">Removed</span> <code>provideRoutes()</code>
+    </h2>
+    <p class="description">
+      <code>provideRoutes()</code> has been removed. Use
+      <code>provideRouter()</code> for top-level configuration or the
+      <code>ROUTES</code> multi token for dynamic/lazy route registration.
+    </p>
+
+    <div class="migration-card">
+      <div class="migration-row">
+        <span class="badge-before">Before</span>
+        <code class="strike">provideRoutes(childRoutes)</code>
+      </div>
+      <div class="migration-row">
+        <span class="badge-after">After</span>
+        <code class="added">provideRouter(routes)</code> or
+        <code class="added">&#123; provide: ROUTES, useValue: routes, multi: true &#125;</code>
+      </div>
+    </div>
+
+    <pre class="code-note"><code>{{ provideRoutesCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 5. CanMatchFn currentSnapshot required                  -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="canmatch-heading">
+    <h2 id="canmatch-heading">
+      5. <span class="changed-badge">Changed</span> <code>CanMatchFn</code>
+    </h2>
+    <p class="description">
+      The <code>currentSnapshot</code> parameter in <code>CanMatchFn</code>
+      is now <strong>required</strong>. This gives you access to the current
+      route state for conditional matching.
+    </p>
+
+    <div class="migration-card">
+      <div class="migration-row">
+        <span class="badge-before">Before</span>
+        <code class="strike">(route, segments) =&gt; boolean</code>
+      </div>
+      <div class="migration-row">
+        <span class="badge-after">After</span>
+        <code class="added">(route, segments, currentSnapshot) =&gt; boolean</code>
+      </div>
+    </div>
+
+    <pre class="code-note"><code>{{ canMatchCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 6. TitleStrategy return type                            -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="title-heading">
+    <h2 id="title-heading">
+      6. <span class="changed-badge">Stricter</span> <code>TitleStrategy</code>
+    </h2>
+    <p class="description">
+      <code>TitleStrategy.getResolvedTitleForRoute()</code> now returns
+      <code>string | undefined</code> instead of <code>any</code>,
+      providing better type safety for custom title strategies.
+    </p>
+
+    <div class="migration-card">
+      <div class="migration-row">
+        <span class="badge-before">Before</span>
+        <code class="strike">getResolvedTitleForRoute(): any</code>
+      </div>
+      <div class="migration-row">
+        <span class="badge-after">After</span>
+        <code class="added">getResolvedTitleForRoute(): string | undefined</code>
+      </div>
+    </div>
+
+    <pre class="code-note"><code>{{ titleStrategyCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- Summary                                                  -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section notes-section" aria-labelledby="summary-heading">
+    <h2 id="summary-heading">Summary</h2>
+    <ul class="api-notes-list">
+      <li>
+        <strong><code>paramsInheritanceStrategy: 'always'</code></strong> is
+        now the default. Set to <code>'emptyOnly'</code> to restore previous behavior.
+      </li>
+      <li>
+        <strong><code>withComponentInputBinding(options)</code></strong> —
+        New <code>unmatchedInputBehavior</code> and <code>queryParams</code> options.
+      </li>
+      <li>
+        <strong><code>[browserUrl]</code></strong> — New input on
+        <code>routerLink</code> for vanity URLs.
+      </li>
+      <li>
+        <strong><code>provideRoutes()</code></strong> — Removed. Use
+        <code>provideRouter()</code> or <code>ROUTES</code> token.
+      </li>
+      <li>
+        <strong><code>CanMatchFn</code></strong> —
+        <code>currentSnapshot</code> parameter is now required.
+      </li>
+      <li>
+        <strong><code>TitleStrategy.getResolvedTitleForRoute()</code></strong> —
+        Returns <code>string | undefined</code> instead of <code>any</code>.
+      </li>
+    </ul>
+  </section>
+</main>

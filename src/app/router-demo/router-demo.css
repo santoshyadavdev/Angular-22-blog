@@ -1,0 +1,219 @@
+:host {
+  display: block;
+}
+
+.demo-container {
+  max-width: 680px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: #1a1a2e;
+}
+
+h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
+h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.35rem; }
+h2 code { background: #f0f0f5; padding: 0.1em 0.3em; border-radius: 4px; font-size: 0.9em; }
+
+.subtitle { color: #555; margin-bottom: 2rem; font-size: 0.9rem; }
+.subtitle code { background: #f0f0f5; padding: 0.1em 0.3em; border-radius: 4px; font-size: 0.85em; }
+
+.demo-section {
+  margin-bottom: 2.5rem;
+  padding: 1.25rem;
+  background: #fafafe;
+  border: 1px solid #e5e5ea;
+  border-radius: 10px;
+}
+
+.description { color: #555; font-size: 0.85rem; margin-bottom: 1rem; }
+.description code { background: #eef; padding: 0.05em 0.25em; border-radius: 3px; font-size: 0.9em; }
+
+/* Route nav */
+.route-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.nav-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.route-btn {
+  padding: 0.4rem 0.85rem;
+  background: #6366f1;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.route-btn:hover { background: #4f46e5; }
+.route-btn:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
+
+.outlet-container {
+  min-height: 50px;
+  margin-bottom: 0.5rem;
+}
+
+/* Options table */
+.options-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e5e5ea;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.option-row {
+  display: grid;
+  grid-template-columns: 200px 200px 1fr;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.82rem;
+  border-bottom: 1px solid #f0f0f5;
+  align-items: center;
+}
+
+.option-row:last-child { border-bottom: none; }
+
+.option-row.header {
+  background: #f8f8fc;
+  font-weight: 700;
+  color: #555;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.option-row code {
+  background: #eef;
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  font-size: 0.88em;
+}
+
+/* Removed / Changed badges */
+.removed-badge {
+  display: inline-block;
+  padding: 0.12em 0.5em;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.changed-badge {
+  display: inline-block;
+  padding: 0.12em 0.5em;
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Migration cards */
+.migration-card {
+  background: #fff;
+  border: 1px solid #e5e5ea;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.migration-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.82rem;
+  border-bottom: 1px solid #f0f0f5;
+  flex-wrap: wrap;
+}
+
+.migration-row:last-child { border-bottom: none; }
+
+.badge-before {
+  display: inline-block;
+  padding: 0.1em 0.45em;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  min-width: 42px;
+  text-align: center;
+}
+
+.badge-after {
+  display: inline-block;
+  padding: 0.1em 0.45em;
+  background: #dcfce7;
+  color: #166534;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  min-width: 42px;
+  text-align: center;
+}
+
+.strike {
+  text-decoration: line-through;
+  text-decoration-color: #fca5a5;
+  color: #991b1b;
+}
+
+.added {
+  color: #166534;
+  font-weight: 600;
+}
+
+/* Notes */
+.notes-section { background: #f8f8fc; }
+
+.api-notes-list {
+  font-size: 0.85rem;
+  color: #555;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.api-notes-list code {
+  background: #eef;
+  padding: 0.05em 0.3em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Code note */
+.code-note {
+  margin: 0.75rem 0 0;
+  padding: 0.6rem 0.75rem;
+  background: #f0f0f5;
+  border-radius: 6px;
+  border-left: 3px solid #c7d2fe;
+  overflow-x: auto;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.code-note code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}

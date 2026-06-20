@@ -1,0 +1,265 @@
+<main class="demo-container" aria-labelledby="demo-heading">
+  <h1 id="demo-heading">Angular Material 22</h1>
+  <p class="subtitle">
+    New features in <code>&#64;angular/material@22</code> — button progress indicators,
+    dialog input bindings, flexible tab animations, stabilized ARIA components, and more.
+  </p>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 1. Button Progress Indicator                            -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="progress-heading">
+    <h2 id="progress-heading">1. Button Progress Indicator</h2>
+    <p class="description">
+      Buttons now accept a <code>[showProgress]</code> input that displays a
+      built-in spinner overlay. No extra wrapper or positioning needed.
+    </p>
+
+    <div class="button-row">
+      <button
+        mat-flat-button
+        [showProgress]="loadingFlat()"
+        (click)="simulateAsync('flat')"
+      >
+        <mat-spinner progressIndicator diameter="24"></mat-spinner>
+        Flat Button
+      </button>
+
+      <button
+        mat-raised-button
+        [showProgress]="loadingRaised()"
+        (click)="simulateAsync('raised')"
+      >
+        <mat-spinner progressIndicator diameter="24"></mat-spinner>
+        Raised Button
+      </button>
+
+      <button
+        mat-stroked-button
+        [showProgress]="loadingStroked()"
+        (click)="simulateAsync('stroked')"
+      >
+        <mat-spinner progressIndicator diameter="24"></mat-spinner>
+        Stroked Button
+      </button>
+    </div>
+
+    <p class="hint">Click any button — it shows a progress spinner for 2 seconds.</p>
+
+    <pre class="code-note"><code>{{ buttonProgressCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 2. Dialog with Input Bindings                           -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="dialog-heading">
+    <h2 id="dialog-heading">2. Dialog with Input Bindings</h2>
+    <p class="description">
+      <code>MatDialog.open()</code> now supports a <code>bindings</code> array.
+      Pass <code>inputBinding()</code> from <code>&#64;angular/core</code> to bind
+      signal values directly to the dialog component's <code>input()</code> signals —
+      no <code>MAT_DIALOG_DATA</code> injection needed.
+    </p>
+
+    <div class="input-row">
+      <label for="user-name-input" class="input-label">Your name:</label>
+      <input
+        id="user-name-input"
+        type="text"
+        class="text-input"
+        [ngModel]="userName()"
+        (ngModelChange)="userName.set($event)"
+        placeholder="Enter your name"
+      />
+      <button
+        mat-flat-button
+        (click)="openGreetingDialog()"
+        class="open-dialog-btn"
+      >
+        Open Dialog
+      </button>
+    </div>
+
+    <pre class="code-note"><code>{{ dialogBindingsCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 3. Tab Animation Durations                              -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="tabs-heading">
+    <h2 id="tabs-heading">3. Tab Animation Durations</h2>
+    <p class="description">
+      <code>[animationDuration]</code> now accepts an object with separate
+      <code>body</code> and <code>header</code> durations, giving finer control
+      over tab transitions.
+    </p>
+
+    <div class="button-row" role="radiogroup" aria-label="Animation mode">
+      <button
+        type="button"
+        class="mode-btn"
+        [class.active]="animationMode() === 'default'"
+        (click)="setTabAnimation('default')"
+        [attr.aria-pressed]="animationMode() === 'default'"
+      >
+        Uniform (500ms)
+      </button>
+      <button
+        type="button"
+        class="mode-btn"
+        [class.active]="animationMode() === 'custom'"
+        (click)="setTabAnimation('custom')"
+        [attr.aria-pressed]="animationMode() === 'custom'"
+      >
+        Split (body: 800ms, header: 200ms)
+      </button>
+    </div>
+
+    <mat-tab-group [animationDuration]="animationDuration()">
+      <mat-tab label="Overview">
+        <div class="tab-content">
+          <p>Overview content — switch tabs to see the animation difference.</p>
+        </div>
+      </mat-tab>
+      <mat-tab label="Details">
+        <div class="tab-content">
+          <p>Details content — the body panel slides while the ink bar moves at its own speed.</p>
+        </div>
+      </mat-tab>
+      <mat-tab label="Settings">
+        <div class="tab-content">
+          <p>Settings content — try switching between uniform and split durations.</p>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <pre class="code-note"><code>{{ tabAnimationCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 4. ARIA Components Stabilized                           -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="aria-heading">
+    <h2 id="aria-heading">4. CDK ARIA Components Stabilized</h2>
+    <p class="description">
+      Seven CDK ARIA primitives moved from <code>cdk-experimental</code> to
+      stable in v22. These are low-level building blocks for custom accessible widgets.
+    </p>
+
+    <ul class="aria-list">
+      <li><code>CdkCombobox</code> — autocomplete / dropdown patterns</li>
+      <li><code>CdkGrid</code> — data grid keyboard navigation</li>
+      <li><code>CdkListbox</code> — single &amp; multi-select listbox</li>
+      <li><code>CdkMenu</code> — accessible menus &amp; menu bars</li>
+      <li><code>CdkTabs</code> — tab widget pattern</li>
+      <li><code>CdkToolbar</code> — roving tabindex toolbar</li>
+      <li><code>CdkTree</code> — treeview navigation</li>
+    </ul>
+
+    <pre class="code-note"><code>{{ ariaCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 5. Portal Directives + Typography Mixins                -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="portal-heading">
+    <h2 id="portal-heading">5. CDK Portal Directives &amp; Typography Mixins</h2>
+    <p class="description">
+      <code>ComponentPortal</code> now supports attaching directives (not just components).
+      New SCSS typography mixins give per-component control.
+    </p>
+
+    <h3 class="sub-heading">Portal Directives</h3>
+    <p class="description">
+      Previously, <code>ComponentPortal</code> only accepted component types.
+      In v22, you can attach a directive to a portal outlet — useful for injecting
+      behaviour without rendering a host element.
+    </p>
+    <pre class="code-note"><code>{{ portalCode }}</code></pre>
+
+    <h3 class="sub-heading">Typography Mixins</h3>
+    <p class="description">
+      New granular SCSS mixins let you apply Material typography to individual components
+      instead of the entire app. Pair with <code>define-theme()</code> to customise type scales.
+    </p>
+    <pre class="code-note"><code>{{ typographyCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 6. Combobox Promoted to Stable                          -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="combobox-heading">
+    <h2 id="combobox-heading">6. Combobox Promoted to Stable</h2>
+    <p class="description">
+      <code>SimpleCombobox</code> has been promoted to <code>Combobox</code>
+      and moved from <code>cdk-experimental</code> to <code>&#64;angular/cdk</code>.
+      The legacy combobox and autocomplete implementations have been removed.
+    </p>
+
+    <div class="migration-card">
+      <div class="migration-row">
+        <span class="badge-before">Before</span>
+        <code class="strike">CdkSimpleCombobox</code> from <code>cdk-experimental</code>
+      </div>
+      <div class="migration-row">
+        <span class="badge-after">After</span>
+        <code class="added">CdkCombobox</code> from <code>&#64;angular/cdk/combobox</code>
+      </div>
+    </div>
+
+    <pre class="code-note"><code>{{ comboboxCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 7. Google Maps gmp-click                                -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="maps-heading">
+    <h2 id="maps-heading">7. Google Maps: <code>gmp-click</code> Event</h2>
+    <p class="description">
+      The Google Maps component now supports the <code>gmp-click</code> event
+      for advanced marker interactions, providing richer event data including
+      the exact <code>LatLng</code> of the click.
+    </p>
+
+    <pre class="code-note"><code>{{ googleMapsCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 8. Material + CDK Breaking Changes                      -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section notes-section" aria-labelledby="breaking-heading">
+    <h2 id="breaking-heading">8. Material &amp; CDK Breaking Changes</h2>
+    <ul class="api-notes-list">
+      <li>
+        <strong><code>[values]</code> &rarr; <code>[value]</code></strong> &mdash;
+        Renamed across Combobox, Listbox, Tree, Menu, Toolbar, and Select.
+      </li>
+      <li>
+        <strong><code>MatListOption.checkboxPosition</code></strong> &mdash;
+        Removed. Use <code>togglePosition</code> instead.
+      </li>
+      <li>
+        <strong><code>ArrowViewState</code></strong> &mdash;
+        Removed from <code>MatSort</code>.
+      </li>
+      <li>
+        <strong><code>ContextMenuTracker</code></strong> &mdash;
+        Renamed to <code>MenuTracker</code>.
+      </li>
+      <li>
+        <strong>CDK Focus Trap</strong> &mdash;
+        <code>injector</code> parameter now required.
+        <code>FocusTrapFactory.create(bool)</code> replaced with config object.
+      </li>
+      <li>
+        <strong><code>DropListRef.drop(event)</code></strong> &mdash;
+        <code>event</code> parameter is now required.
+      </li>
+      <li>
+        <strong>Rest-arg constructors removed</strong> &mdash;
+        Update <code>super()</code> calls if extending Material/CDK classes.
+      </li>
+    </ul>
+
+    <pre class="code-note"><code>{{ breakingListCode }}</code></pre>
+  </section>

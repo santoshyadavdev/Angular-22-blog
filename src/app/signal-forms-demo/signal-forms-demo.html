@@ -1,0 +1,405 @@
+<main class="demo-container" aria-labelledby="form-heading">
+  <h1 id="form-heading">Angular 22 Signal Forms &mdash; Profile Demo</h1>
+  <p class="subtitle">
+    Signal forms are now <strong>stable</strong> in v22! Demonstrating
+    <code>reloadValidation()</code>, <code>getError()</code>,
+    <code>validateAsync</code>, <code>validateHttp</code>,
+    <code>debounce</code>, <code>ngNoCva</code>,
+    <code>SignalFormControl</code>, and <code>submit()</code>.
+  </p>
+
+  <!-- ─── Signal Form ─── -->
+  <form [formRoot]="profileForm" (ngSubmit)="onSubmit()" class="profile-form" novalidate>
+
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- Username: validateAsync + debounce + reloadValidation()    -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <div class="form-field">
+      <label for="username">
+        Username <span class="required" aria-hidden="true">*</span>
+      </label>
+      <div class="input-group">
+        <input
+          id="username"
+          type="text"
+          [formField]="profileForm.username"
+          autocomplete="username"
+          aria-required="true"
+          [attr.aria-invalid]="profileForm.username().invalid()"
+          [attr.aria-describedby]="profileForm.username().invalid() ? 'username-errors' : null"
+        />
+        <button
+          type="button"
+          class="reload-btn"
+          (click)="reloadUsernameValidation()"
+          aria-label="Re-check username availability"
+          title="Calls FieldState.reloadValidation()"
+        >
+          &#x21bb;
+        </button>
+      </div>
+      @if (profileForm.username().pending()) {
+        <p class="hint pending" role="status">Checking availability&hellip;</p>
+      }
+      <!-- ── getError(): typed error access ── -->
+      @if (profileForm.username().touched() && profileForm.username().invalid()) {
+        <div id="username-errors" class="errors" role="alert">
+          @if (profileForm.username().getError('required')) {
+            <p>Username is required.</p>
+          }
+          @if (profileForm.username().getError('minLength'); as err) {
+            <p>Must be at least {{ err.minLength }} characters.</p>
+          }
+          @if (profileForm.username().getError('usernameTaken'); as err) {
+            <p>{{ err.message }}</p>
+          }
+          @if (profileForm.username().getError('asyncError'); as err) {
+            <p>{{ err.message }}</p>
+          }
+        </div>
+      }
+      <p class="api-note">
+        <code>validateAsync</code> with <code>resource()</code> &bull;
+        <code>debounce(p.username, 400)</code> &bull;
+        <code>reloadValidation()</code> &bull;
+        <code>getError('minLength')</code>
+      </p>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- Email: validateHttp + debounce + reloadValidation()        -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <div class="form-field">
+      <label for="email">
+        Email <span class="required" aria-hidden="true">*</span>
+      </label>
+      <div class="input-group">
+        <input
+          id="email"
+          type="email"
+          [formField]="profileForm.emailAddress"
+          autocomplete="email"
+          aria-required="true"
+          [attr.aria-invalid]="profileForm.emailAddress().invalid()"
+          [attr.aria-describedby]="profileForm.emailAddress().invalid() ? 'email-errors' : null"
+        />
+        <button
+          type="button"
+          class="reload-btn"
+          (click)="reloadEmailValidation()"
+          aria-label="Re-check email registration"
+          title="Calls FieldState.reloadValidation()"
+        >
+          &#x21bb;
+        </button>
+      </div>
+      @if (profileForm.emailAddress().pending()) {
+        <p class="hint pending" role="status">Verifying email&hellip;</p>
+      }
+      @if (profileForm.emailAddress().touched() && profileForm.emailAddress().invalid()) {
+        <div id="email-errors" class="errors" role="alert">
+          @if (profileForm.emailAddress().getError('required')) {
+            <p>Email is required.</p>
+          }
+          @if (profileForm.emailAddress().getError('email')) {
+            <p>Enter a valid email address.</p>
+          }
+          @if (profileForm.emailAddress().getError('emailRegistered'); as err) {
+            <p>{{ err.message }}</p>
+          }
+        </div>
+      }
+      <p class="api-note">
+        <code>validateHttp</code> with <code>httpResource</code> &bull;
+        <code>debounce(p.emailAddress, 500)</code> &bull;
+        <code>reloadValidation()</code>
+      </p>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- Full Name: getError() for typed access                     -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <div class="form-field">
+      <label for="fullName">
+        Full Name <span class="required" aria-hidden="true">*</span>
+      </label>
+      <input
+        id="fullName"
+        type="text"
+        [formField]="profileForm.fullName"
+        autocomplete="name"
+        aria-required="true"
+        [attr.aria-invalid]="profileForm.fullName().invalid()"
+        [attr.aria-describedby]="profileForm.fullName().invalid() ? 'fullname-errors' : null"
+      />
+      @if (profileForm.fullName().touched() && profileForm.fullName().invalid()) {
+        <div id="fullname-errors" class="errors" role="alert">
+          @if (profileForm.fullName().getError('required')) {
+            <p>Full name is required.</p>
+          }
+          @if (profileForm.fullName().getError('maxLength'); as err) {
+            <p>Must be {{ err.maxLength }} characters or fewer.</p>
+          }
+        </div>
+      }
+      <p class="api-note">
+        <code>getError('required')</code> &bull;
+        <code>getError('maxLength')?.maxLength</code> for typed access
+      </p>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- Age: min/max with typed getError()                         -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <div class="form-field">
+      <label for="age">
+        Age <span class="required" aria-hidden="true">*</span>
+      </label>
+      <input
+        id="age"
+        type="number"
+        [formField]="profileForm.age"
+        aria-required="true"
+        [attr.aria-invalid]="profileForm.age().invalid()"
+        [attr.aria-describedby]="profileForm.age().invalid() ? 'age-errors' : null"
+      />
+      @if (profileForm.age().touched() && profileForm.age().invalid()) {
+        <div id="age-errors" class="errors" role="alert">
+          @if (profileForm.age().getError('required')) {
+            <p>Age is required.</p>
+          }
+          @if (profileForm.age().getError('min'); as err) {
+            <p>Must be at least {{ err.min }}.</p>
+          }
+          @if (profileForm.age().getError('max'); as err) {
+            <p>Must be {{ err.max }} or less.</p>
+          }
+        </div>
+      }
+      <p class="api-note">
+        <code>getError('min')?.min</code> &bull;
+        <code>getError('max')?.max</code>
+      </p>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- Website: pattern + ngNoCva demo                            -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <div class="form-field">
+      <label for="website">Website</label>
+      <input
+        id="website"
+        type="url"
+        [formField]="profileForm.website"
+        ngNoCva
+        autocomplete="url"
+        placeholder="https://example.com"
+        [attr.aria-invalid]="profileForm.website().invalid()"
+        [attr.aria-describedby]="profileForm.website().invalid() ? 'website-errors' : null"
+      />
+      @if (profileForm.website().touched() && profileForm.website().invalid()) {
+        <div id="website-errors" class="errors" role="alert">
+          @if (profileForm.website().getError('pattern'); as err) {
+            <p>{{ err.message }}</p>
+          }
+        </div>
+      }
+      <p class="api-note">
+        <code>ngNoCva</code> opts out of ControlValueAccessor &bull;
+        <code>pattern(p.website, /^https?:\/\/.+/)</code>
+      </p>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- Bio: custom validate() + maxLength                         -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <div class="form-field">
+      <label for="bio">Bio</label>
+      <textarea
+        id="bio"
+        rows="4"
+        [formField]="profileForm.bio"
+        [attr.aria-invalid]="profileForm.bio().invalid()"
+        [attr.aria-describedby]="profileForm.bio().invalid() ? 'bio-errors' : null"
+      ></textarea>
+      <p class="hint">
+        {{ bioCharCount() }}/500 characters
+        @if (bioCharsRemaining() < 50) {
+          <span class="warning">({{ bioCharsRemaining() }} remaining)</span>
+        }
+      </p>
+      @if (profileForm.bio().touched() && profileForm.bio().invalid()) {
+        <div id="bio-errors" class="errors" role="alert">
+          @if (profileForm.bio().getError('maxLength')) {
+            <p>Bio must be 500 characters or fewer.</p>
+          }
+          @if (profileForm.bio().getError('tooShort'); as err) {
+            <p>{{ err.message }}</p>
+          }
+        </div>
+      }
+      <p class="api-note">
+        <code>validate()</code> custom sync validator &bull;
+        <code>maxLength(p.bio, 500)</code>
+      </p>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- SignalFormControl — Reactive Forms compatibility            -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <section class="compat-section" aria-labelledby="compat-heading">
+      <h2 id="compat-heading">SignalFormControl (Reactive Forms Compat)</h2>
+      <p class="subtitle">
+        <code>SignalFormControl</code> bridges signal forms into a traditional
+        <code>FormGroup</code>. Use <code>ngNoCva</code> on the input to
+        prevent the CVA from interfering with <code>[formField]</code>.
+      </p>
+
+      <div class="form-field" [formGroup]="reactiveFormGroup">
+        <label for="nickname">Nickname</label>
+        <input
+          id="nickname"
+          type="text"
+          ngNoCva
+          [formField]="nicknameControl.fieldTree"
+          autocomplete="nickname"
+          [attr.aria-invalid]="nicknameControl.invalid"
+          [attr.aria-describedby]="nicknameControl.invalid ? 'nickname-errors' : null"
+        />
+        @if (nicknameControl.touched && nicknameControl.invalid) {
+          <div id="nickname-errors" class="errors" role="alert">
+            @if (nicknameControl.fieldTree().getError('minLength'); as err) {
+              <p>Nickname must be at least {{ err.minLength }} characters.</p>
+            }
+            @if (nicknameControl.fieldTree().getError('maxLength'); as err) {
+              <p>Nickname must be {{ err.maxLength }} characters or fewer.</p>
+            }
+          </div>
+        }
+        <p class="api-note">
+          <code>new SignalFormControl('', p =&gt; &#123; minLength(p, 2); &#125;)</code> &bull;
+          <code>ngNoCva</code> on input &bull;
+          <code>[formField]="nicknameControl.fieldTree"</code>
+        </p>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- Form View Component (FVC)                                   -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <section class="fvc-section" aria-labelledby="fvc-heading">
+      <h2 id="fvc-heading">Form View Component (FVC)</h2>
+      <p class="subtitle">
+        Build custom form controls by implementing <code>FormValueControl&lt;T&gt;</code>.
+        The only requirement is a <code>value</code> model signal.
+        Use them with <code>[formField]</code> just like native inputs.
+      </p>
+
+      <div class="fvc-demo">
+        <div class="form-field">
+          <label>Rate this demo</label>
+          <app-rating-control [formField]="ratingForm.rating" />
+        </div>
+
+        @if (ratingForm.rating().touched() && ratingForm.rating().invalid()) {
+          <div class="errors" role="alert">
+            @if (ratingForm.rating().getError('required')) {
+              <p>Rating is required.</p>
+            }
+            @if (ratingForm.rating().getError('min'); as err) {
+              <p>{{ err.message }}</p>
+            }
+          </div>
+        }
+
+        <div class="fvc-state">
+          <span>Value: <strong>{{ ratingModel().rating }}</strong></span>
+          <span>Valid: <strong>{{ ratingForm.rating().valid() }}</strong></span>
+          <span>Touched: <strong>{{ ratingForm.rating().touched() }}</strong></span>
+        </div>
+      </div>
+
+      <p class="api-note">
+        <code>FormValueControl&lt;number&gt;</code> &bull;
+        <code>value = model(0)</code> &bull;
+        Auto-syncs <code>disabled</code>, <code>touched</code>, <code>name</code>, <code>required</code>
+      </p>
+
+      <pre class="code-note"><code>{{ fvcCode }}</code></pre>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- Angular 22 API Highlights                                   -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <section class="notes-section" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">Angular 22 API Highlights</h2>
+      <ul class="api-notes-list">
+        <li>
+          <strong><code>reloadValidation()</code></strong> &mdash;
+          Now a first-class method on <code>FieldState</code>.
+          Reloads all async validators for a field and its descendants.
+        </li>
+        <li>
+          <strong><code>getError(kind)</code></strong> &mdash;
+          Typed, reactive error access on <code>FieldState</code>.
+          Returns the typed error instance (e.g. <code>getError('min').min</code>)
+          or <code>undefined</code>.
+        </li>
+        <li>
+          <strong><code>ngNoCva</code></strong> &mdash;
+          Attribute to opt out of ControlValueAccessor binding.
+          Useful when using <code>[formField]</code> inside a
+          <code>[formGroup]</code> to prevent CVA conflicts.
+        </li>
+        <li>
+          <strong><code>debounce(path, ms | 'blur')</code></strong> &mdash;
+          Debounces UI-to-model updates. Async validators also
+          naturally debounce via the Resource reactivity cycle.
+        </li>
+        <li>
+          <strong><code>SignalFormControl</code></strong> &mdash;
+          Bridges signal forms into a <code>FormGroup</code>.
+          Access the underlying <code>FieldTree</code> via
+          <code>.fieldTree</code>.
+        </li>
+        <li>
+          <strong>Signal Forms are now stable!</strong> &mdash;
+          Graduated from experimental to <code>@publicApi 22.0</code>.
+        </li>
+      </ul>
+    </section>
+
+    <!-- ─── Actions ─── -->
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [attr.aria-disabled]="submitting()"
+        [class.submitting]="submitting()"
+      >
+        @if (submitting()) {
+          Submitting&hellip;
+        } @else {
+          Submit Profile
+        }
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="resetForm()">
+        Reset
+      </button>
+    </div>
+  </form>
+
+  <!-- ─── Submitted Data ─── -->
+  @if (submitted()) {
+    <section class="submitted-output" aria-labelledby="submitted-heading">
+      <h2 id="submitted-heading">Submitted Data</h2>
+      <pre><code>{{ submittedData() | json }}</code></pre>
+    </section>
+  }
+</main>
