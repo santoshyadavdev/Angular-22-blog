@@ -1,11 +1,24 @@
-/* You can add global styles to this file, and also import other style files */@use '@angular/material' as mat;
+/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
 
 html {
   @include mat.theme((
     color: (
       primary: mat.$violet-palette,
     ),
-    typography: Roboto,
+    typography: Inter,
     density: 0,
   ));
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #1a1a2e;
+}
+
+code, pre, .code-note code {
+  font-family: 'Fira Code', 'SF Mono', 'Cascadia Code', monospace;
 }
