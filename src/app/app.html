@@ -1,20 +1,69 @@
-<mat-toolbar class="app-toolbar" aria-label="Main navigation">
-  <span class="app-title">Angular 22</span>
-  <nav class="nav-links">
-    <a mat-button routerLink="/signal-forms-demo" routerLinkActive="active">Signal Forms</a>
-    <a mat-button routerLink="/linked-signal-demo" routerLinkActive="active">linkedSignal</a>
-    <a mat-button routerLink="/debounced-signal-demo" routerLinkActive="active">Debounced</a>
-    <a mat-button routerLink="/inject-async-demo" routerLinkActive="active">injectAsync</a>
-    <a mat-button routerLink="/fetch-backend-demo" routerLinkActive="active">FetchBackend</a>
-    <a mat-button routerLink="/hydration-demo" routerLinkActive="active">Hydration</a>
-    <a mat-button routerLink="/resource-demo" routerLinkActive="active">Resource</a>
-    <a mat-button routerLink="/compiler-demo" routerLinkActive="active">Compiler</a>
-    <a mat-button routerLink="/router-demo" routerLinkActive="active">Router</a>
-    <a mat-button routerLink="/typescript6-demo" routerLinkActive="active">TS 6</a>
-    <a mat-button routerLink="/breaking-changes" routerLinkActive="active">Breaking</a>
-    <a mat-button routerLink="/material-demo" routerLinkActive="active">Material</a>
-    <a mat-button routerLink="/cli-demo" routerLinkActive="active">CLI</a>
-  </nav>
-</mat-toolbar>
+<mat-sidenav-container class="app-container">
+  <mat-sidenav
+    #sidenav
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="sidenavOpen()"
+    (openedChange)="sidenavOpen.set($event)"
+    class="app-sidenav"
+    [fixedInViewport]="true"
+    fixedTopGap="56"
+  >
+    <div class="sidenav-header">
+      <span class="sidenav-logo">Ng</span>
+      <span class="sidenav-title">Angular 22 Demos</span>
+    </div>
+    <nav class="nav-list" aria-label="Demo navigation">
+      <a routerLink="/signal-forms-demo" routerLinkActive="active" (click)="closeMobileSidenav()">
+        <span class="nav-icon">&#x1F4DD;</span> Signal Forms
+      </a>
+      <a routerLink="/linked-signal-demo" routerLinkActive="active" (click)="closeMobileSidenav()">
+        <span class="nav-icon">&#x1F517;</span> linkedSignal
+      </a>
+      <a routerLink="/debounced-signal-demo" routerLinkActive="active" (click)="closeMobileSidenav()">
+        <span class="nav-icon">&#x23F1;</span> Debounced Signals
+      </a>
+      <a routerLink="/inject-async-demo" routerLinkActive="active" (click)="closeMobileSidenav()">
+        <span class="nav-icon">&#x26A1;</span> injectAsync
+      </a>
+      <a routerLink="/fetch-backend-demo" routerLinkActive="active" (click)="closeMobileSidenav()">
+        <span class="nav-icon">&#x1F310;</span> FetchBackend
+      </a>
+      <a routerLink="/hydration-demo" routerLinkActive="active" (click)="closeMobileSidenav()">
+        <span class="nav-icon">&#x1F4A7;</span> Hydration
+      </a>
+      <a routerLink="/resource-demo" routerLinkActive="active" (click)="closeMobileSidenav()">
+        <span class="nav-icon">&#x1F4E6;</span> Resource API
+      </a>
+      <a routerLink="/compiler-demo" routerLinkActive="active" (click)="closeMobileSidenav()">
+        <span class="nav-icon">&#x2699;</span> Compiler
+      </a>
+      <a routerLink="/router-demo" routerLinkActive="active" (click)="closeMobileSidenav()">
+        <span class="nav-icon">&#x1F6E4;</span> Router
+      </a>
+      <a routerLink="/typescript6-demo" routerLinkActive="active" (click)="closeMobileSidenav()">
+        <span class="nav-icon">&#x1F4D8;</span> TypeScript 6
+      </a>
+      <a routerLink="/breaking-changes" routerLinkActive="active" (click)="closeMobileSidenav()">
+        <span class="nav-icon">&#x26A0;</span> Breaking Changes
+      </a>
+      <a routerLink="/material-demo" routerLinkActive="active" (click)="closeMobileSidenav()">
+        <span class="nav-icon">&#x1F3A8;</span> Material 22
+      </a>
+      <a routerLink="/cli-demo" routerLinkActive="active" (click)="closeMobileSidenav()">
+        <span class="nav-icon">&#x1F4BB;</span> CLI
+      </a>
+    </nav>
+  </mat-sidenav>
 
-<router-outlet />
+  <mat-sidenav-content class="app-content">
+    <mat-toolbar class="app-toolbar" color="primary">
+      <button mat-icon-button (click)="toggleSidenav()" aria-label="Toggle navigation">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="toolbar-title">Angular 22</span>
+    </mat-toolbar>
+    <main class="page-content">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
