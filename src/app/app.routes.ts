@@ -95,5 +95,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./cli-demo/cli-demo').then((m) => m.CliDemo),
   },
+  {
+    path: 'webmcp-demo',
+    loadComponent: () =>
+      import('./webmcp-demo/webmcp-demo').then((m) => m.WebMcpDemo),
+  },
   { path: '', redirectTo: 'signal-forms-demo', pathMatch: 'full' },
 ];

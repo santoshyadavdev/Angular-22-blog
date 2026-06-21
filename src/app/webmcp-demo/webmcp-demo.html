@@ -1,0 +1,174 @@
+<main class="demo-container" aria-labelledby="demo-heading">
+  <h1 id="demo-heading">WebMCP Tools Support</h1>
+  <p class="subtitle">
+    Angular 22 introduces <strong>experimental</strong> WebMCP support,
+    enabling AI agents to invoke tools registered in your Angular app
+    via the <a href="https://spec.webmcp.org" target="_blank" rel="noopener">WebMCP protocol</a>.
+  </p>
+
+  <div class="experimental-banner" role="note">
+    <span class="exp-icon" aria-hidden="true">&#x1F9EA;</span>
+    <div>
+      <strong>Experimental API</strong> &mdash; These APIs are prefixed with
+      <code>Experimental</code> and may change in future versions.
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 1. ToolDescriptor interface                             -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="descriptor-heading">
+    <h2 id="descriptor-heading">1. <code>ToolDescriptor</code> Interface</h2>
+    <p class="description">
+      Every WebMCP tool is defined by a <code>ToolDescriptor</code> with a
+      <code>name</code>, <code>description</code>, a JSON Schema
+      <code>inputSchema</code>, and an <code>execute</code> callback.
+      The <code>Client</code> provides an <code>AbortSignal</code> for
+      cancellation.
+    </p>
+
+    <div class="feature-list">
+      <div class="feature-item">
+        <code class="feature-name">name</code>
+        <span>Unique identifier the agent uses to call this tool</span>
+      </div>
+      <div class="feature-item">
+        <code class="feature-name">description</code>
+        <span>Helps the agent decide when to use the tool</span>
+      </div>
+      <div class="feature-item">
+        <code class="feature-name">inputSchema</code>
+        <span>JSON Schema — TypeScript infers arg types from it</span>
+      </div>
+      <div class="feature-item">
+        <code class="feature-name">execute</code>
+        <span>Callback that runs in an injection context</span>
+      </div>
+      <div class="feature-item">
+        <code class="feature-name">client.signal</code>
+        <span><code>AbortSignal</code> for cancelling long operations</span>
+      </div>
+    </div>
+
+    <pre class="code-note"><code>{{ toolDescriptorCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 2. provideExperimentalWebMcpTools                       -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="provide-heading">
+    <h2 id="provide-heading">2. <code>provideExperimentalWebMcpTools()</code></h2>
+    <p class="description">
+      Register tools at the <strong>application level</strong> in
+      <code>app.config.ts</code>. Tools are available for the entire
+      lifetime of the app. The <code>execute</code> callback runs in
+      the application's injection context, so you can use
+      <code>inject()</code>.
+    </p>
+
+    <div class="how-it-works">
+      <div class="step">
+        <span class="step-num">1</span>
+        <span>Define tools with <code>provideExperimentalWebMcpTools()</code></span>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <span>An MCP-compatible agent connects to the app</span>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <span>Agent discovers and invokes tools via the WebMCP protocol</span>
+      </div>
+      <div class="step">
+        <span class="step-num">4</span>
+        <span>Angular runs the <code>execute</code> function and returns the result</span>
+      </div>
+    </div>
+
+    <pre class="code-note"><code>{{ provideToolsCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 3. declareExperimentalWebMcpTool                        -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="declare-heading">
+    <h2 id="declare-heading">3. <code>declareExperimentalWebMcpTool()</code></h2>
+    <p class="description">
+      Register a tool <strong>dynamically</strong> inside a component or
+      service. The tool is tied to the injection context — it's
+      automatically <strong>unregistered when the component is destroyed</strong>.
+      This is ideal for context-specific tools that should only be
+      available while a certain view is active.
+    </p>
+
+    <div class="lifecycle-card">
+      <div class="lifecycle-row">
+        <span class="lifecycle-event create">Component Created</span>
+        <span class="lifecycle-arrow">&rarr;</span>
+        <span>Tool registered &amp; available to agents</span>
+      </div>
+      <div class="lifecycle-row">
+        <span class="lifecycle-event destroy">Component Destroyed</span>
+        <span class="lifecycle-arrow">&rarr;</span>
+        <span>Tool automatically unregistered</span>
+      </div>
+    </div>
+
+    <pre class="code-note"><code>{{ declareToolCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 4. Route-level tools                                    -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="route-heading">
+    <h2 id="route-heading">4. Route-Level Tools</h2>
+    <p class="description">
+      Since <code>provideExperimentalWebMcpTools()</code> returns
+      <code>EnvironmentProviders</code>, you can scope tools to
+      specific routes. The tools are only available when the route
+      is active — perfect for admin panels, dashboards, or
+      feature-specific AI capabilities.
+    </p>
+
+    <pre class="code-note"><code>{{ routeLevelCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- Summary                                                  -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section notes-section" aria-labelledby="summary-heading">
+    <h2 id="summary-heading">Key Points</h2>
+    <ul class="api-notes-list">
+      <li>
+        <strong>Experimental</strong> &mdash; APIs are prefixed with
+        <code>Experimental</code> and may change.
+      </li>
+      <li>
+        <strong>Type-safe</strong> &mdash; TypeScript infers
+        <code>execute</code> argument types from the
+        <code>inputSchema</code> JSON Schema via
+        <code>InferArgsFromInputSchema</code>.
+      </li>
+      <li>
+        <strong>Injection context</strong> &mdash;
+        <code>execute</code> runs in the associated injector's
+        context, so <code>inject()</code> works inside it.
+      </li>
+      <li>
+        <strong>Automatic cleanup</strong> &mdash;
+        <code>declareExperimentalWebMcpTool</code> unregisters the tool
+        when the injection context is destroyed.
+      </li>
+      <li>
+        <strong>Cancellation</strong> &mdash; The <code>Client</code>
+        provides an <code>AbortSignal</code> to cancel long-running
+        operations.
+      </li>
+      <li>
+        <strong>Scoped registration</strong> &mdash; Use at the app level,
+        route level, or component level depending on when the tool
+        should be available.
+      </li>
+    </ul>
+  </section>
+</main>
