@@ -42,7 +42,7 @@ export class TypeScript6Demo {
   targetDate = signal('');
   daysUntilTarget = signal<string | null>(null);
 
-  temporalCode = `// Temporal API — native date/time handling
+  temporalCode = `// Temporal API ,  native date/time handling
 const now = Temporal.Now.instant();
 console.log(now.toString());
 
@@ -55,7 +55,7 @@ console.log(diff.days); // days between`;
   wordInput = signal('The quick brown fox jumps over the lazy dog. The dog barked at the fox.');
   wordFrequencies = signal<[string, number][]>([]);
 
-  getOrInsertCode = `// Map.getOrInsert() — default value if key missing
+  getOrInsertCode = `// Map.getOrInsert() ,  default value if key missing
 const freq = new Map<string, number>();
 
 for (const word of words) {
@@ -64,7 +64,7 @@ for (const word of words) {
   freq.set(word, count + 1);
 }
 
-// getOrInsertComputed — lazy default via callback
+// getOrInsertComputed ,  lazy default via callback
 const cache = new Map<string, ExpensiveResult>();
 const result = cache.getOrInsertComputed(key, (k) => {
   return computeExpensiveResult(k);
@@ -79,7 +79,7 @@ const result = cache.getOrInsertComputed(key, (k) => {
   );
   highlightedText = signal('');
 
-  regexpEscapeCode = `// RegExp.escape() — safely escape special chars
+  regexpEscapeCode = `// RegExp.escape() ,  safely escape special chars
 const userInput = 'price is $9.99 (USD)';
 const escaped = RegExp.escape(userInput);
 // Result: "price\\ is\\ \\$9\\.99\\ \\(USD\\)"

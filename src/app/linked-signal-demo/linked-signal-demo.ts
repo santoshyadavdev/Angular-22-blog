@@ -22,7 +22,7 @@ interface ShippingMethod {
 })
 export class LinkedSignalDemo {
   // ════════════════════════════════════════════════════════════
-  // 1. Basic linkedSignal — resets when source changes
+  // 1. Basic linkedSignal ,  resets when source changes
   // ════════════════════════════════════════════════════════════
   protected readonly shippingOptions = signal<ShippingMethod[]>([
     { id: 0, name: 'Ground', price: 5 },
@@ -30,7 +30,7 @@ export class LinkedSignalDemo {
     { id: 2, name: 'Sea', price: 8 },
   ]);
 
-  // Linked to shippingOptions — defaults to the first option.
+  // Linked to shippingOptions ,  defaults to the first option.
   // Resets when shippingOptions changes, but can be manually set.
   protected readonly selectedOption = linkedSignal(
     () => this.shippingOptions()[0]
@@ -102,7 +102,7 @@ export class LinkedSignalDemo {
   }
 
   // ════════════════════════════════════════════════════════════
-  // 3. Custom `set` option — write-back to source signal
+  // 3. Custom `set` option ,  write-back to source signal
   //    Temperature converter: Celsius ↔ Fahrenheit
   // ════════════════════════════════════════════════════════════
   protected readonly tempCelsius = signal(0);
@@ -136,7 +136,7 @@ export class LinkedSignalDemo {
   }
 
   // ════════════════════════════════════════════════════════════
-  // 4. Custom `set` with rawSet — nested property update
+  // 4. Custom `set` with rawSet ,  nested property update
   // ════════════════════════════════════════════════════════════
   protected readonly order = signal({
     id: 42,
@@ -145,7 +145,7 @@ export class LinkedSignalDemo {
     notes: '',
   });
 
-  // Linked to order.shippingMethod — uses `set` with `rawSet`
+  // Linked to order.shippingMethod ,  uses `set` with `rawSet`
   protected readonly orderShipping = linkedSignal(
     () => this.order().shippingMethod,
     {
@@ -161,7 +161,7 @@ export class LinkedSignalDemo {
     }
   );
 
-  // Linked to order.notes — demonstrates another nested property
+  // Linked to order.notes ,  demonstrates another nested property
   protected readonly orderNotes = linkedSignal(() => this.order().notes, {
     set: (newNotes, rawSet) => {
       this.order.update((current) => ({

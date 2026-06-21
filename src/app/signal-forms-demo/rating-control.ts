@@ -10,7 +10,7 @@ import type { FormValueControl } from '@angular/forms/signals';
 /**
  * A custom star-rating component that implements `FormValueControl<number>`.
  *
- * This is a Form View Component (FVC) — it integrates with Angular Signal Forms
+ * This is a Form View Component (FVC) ,  it integrates with Angular Signal Forms
  * by implementing the `FormValueControl` contract. The only required property is
  * `value` as a `model()` signal.
  *

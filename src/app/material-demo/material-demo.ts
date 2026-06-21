@@ -31,7 +31,7 @@ import { MatTabsModule } from '@angular/material/tabs';
       </p>
       <p class="greeting-sub">
         This dialog was opened using the new <code>bindings</code> API.
-        Inputs are bound reactively — no <code>data</code> bag needed.
+        Inputs are bound reactively ,  no <code>data</code> bag needed.
       </p>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
@@ -222,11 +222,11 @@ $custom-theme: mat.define-theme((
 ));`;
 
   // ── Section 6: Combobox Promoted to Stable ──
-  readonly comboboxCode = `// BEFORE (Angular ≤21) — SimpleCombobox (developer preview)
+  readonly comboboxCode = `// BEFORE (Angular ≤21) ,  SimpleCombobox (developer preview)
 import { CdkSimpleCombobox } from '@angular/cdk-experimental/combobox';
 <cdk-simple-combobox [values]="options">
 
-// AFTER (Angular 22) — Combobox (stable!)
+// AFTER (Angular 22) ,  Combobox (stable!)
 import { CdkCombobox } from '@angular/cdk/combobox';
 <cdk-combobox [value]="selectedOption">
 

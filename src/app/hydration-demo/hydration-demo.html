@@ -3,7 +3,7 @@
   <p class="subtitle">
     Angular 22 enables <strong>incremental hydration by default</strong> for SSR apps.
     Components inside <code>&#64;defer</code> blocks with <code>hydrate</code> triggers
-    are server-rendered but only hydrated on the client when the trigger fires —
+    are server-rendered but only hydrated on the client when the trigger fires ,
     dramatically improving Time to Interactive.
   </p>
 
@@ -11,7 +11,7 @@
     <strong>How to observe:</strong> Each widget below shows its hydration timestamp.
     In an SSR app, widgets show "(server-rendered)" until their
     <code>hydrate</code> trigger fires.  In dev mode (client-only), they hydrate
-    immediately — but the <code>&#64;defer</code> structure is still in place.
+    immediately ,  but the <code>&#64;defer</code> structure is still in place.
   </div>
 
   <!-- ════════════════════════════════════════════════════════ -->
@@ -171,7 +171,7 @@
       </li>
     </ul>
 
-    <pre class="code-note"><code>// Angular 22 app.config.ts — incremental hydration is ON by default
+    <pre class="code-note"><code>// Angular 22 app.config.ts ,  incremental hydration is ON by default
 export const appConfig: ApplicationConfig = &#123;
   providers: [
     provideClientHydration(withEventReplay()),

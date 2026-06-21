@@ -14,7 +14,7 @@ import {
 })
 export class InjectAsyncDemo {
   // ════════════════════════════════════════════════════════════
-  // 1. Basic injectAsync — load on demand
+  // 1. Basic injectAsync ,  load on demand
   //    The AnalyticsService is NOT in the initial bundle.
   //    It's loaded only when trackEvent() is called.
   // ════════════════════════════════════════════════════════════
@@ -43,7 +43,7 @@ export class InjectAsyncDemo {
   }
 
   // ════════════════════════════════════════════════════════════
-  // 2. Default export — injectAsync handles unwrapping
+  // 2. Default export ,  injectAsync handles unwrapping
   //    MarkdownRendererService uses `export default`.
   // ════════════════════════════════════════════════════════════
   private readonly loadMarkdown = injectAsync(
@@ -77,7 +77,7 @@ export class InjectAsyncDemo {
   }
 
   // ════════════════════════════════════════════════════════════
-  // 3. Prefetch with onIdle — loads in background when
+  // 3. Prefetch with onIdle ,  loads in background when
   //    browser is idle, ready before user clicks
   // ════════════════════════════════════════════════════════════
   private readonly loadPdfExport = injectAsync(
@@ -106,29 +106,29 @@ export class InjectAsyncDemo {
   }
 
   // ─── Code snippets for @Service vs @Injectable comparison ───
-  protected readonly serviceVsInjectableCode = `// @Injectable — the classic way (still works)
+  protected readonly serviceVsInjectableCode = `// @Injectable ,  the classic way (still works)
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private http = inject(HttpClient);
   getUser(id: number) { return this.http.get(\`/api/users/\${id}\`); }
 }
 
-// @Service — the Angular 22 way (simpler!)
+// @Service ,  the Angular 22 way (simpler!)
 @Service()
 export class UserService {
   private http = inject(HttpClient);
   getUser(id: number) { return this.http.get(\`/api/users/\${id}\`); }
 }`;
 
-  protected readonly serviceOptionsCode = `// Auto-provided (default) — equivalent to providedIn: 'root'
+  protected readonly serviceOptionsCode = `// Auto-provided (default) ,  equivalent to providedIn: 'root'
 @Service()
 export class AnalyticsService { }
 
-// NOT auto-provided — must be added to providers manually
+// NOT auto-provided ,  must be added to providers manually
 @Service({ autoProvided: false })
 export class ScopedService { }
 
-// With factory — custom instantiation logic
+// With factory ,  custom instantiation logic
 @Service({
   factory: () => {
     const http = inject(HttpClient);

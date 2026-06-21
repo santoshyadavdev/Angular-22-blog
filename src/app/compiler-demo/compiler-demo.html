@@ -30,7 +30,7 @@
     </div>
 
     <div class="result-card">
-      <!-- Safe navigation chains — the compiler narrows at each step -->
+      <!-- Safe navigation chains ,  the compiler narrows at each step -->
       <div class="narrow-row">
         <span class="label">Name:</span>
         <code>{{ user()?.name ?? 'null' }}</code>
@@ -60,7 +60,7 @@
       </div>
     </div>
 
-    <!-- Narrowing inside &#64;if — after the check, type is non-null -->
+    <!-- Narrowing inside &#64;if ,  after the check, type is non-null -->
     <div class="result-card narrowing-block">
       @if (user(); as u) {
         <p class="narrowed">
@@ -78,7 +78,7 @@
           }
         </p>
       } @else {
-        <p class="null-state">User is <code>null</code> — narrowed out.</p>
+        <p class="null-state">User is <code>null</code> ,  narrowed out.</p>
       }
     </div>
 
@@ -93,7 +93,7 @@
     <p class="description">
       Previously, Angular's <code>?.</code> could return <code>null</code> in
       some cases. Now it always returns <code>undefined</code> when the chain
-      short-circuits — matching standard JavaScript behavior.
+      short-circuits ,  matching standard JavaScript behavior.
     </p>
 
     <div class="result-card">
@@ -154,7 +154,7 @@
     <!-- This HTML comment is preserved in the rendered DOM! -->
     <!-- Angular 22: HTML comments are now supported in templates -->
     <div class="result-card comment-demo">
-      <p>Inspect this element in DevTools — you'll see HTML comments in the DOM.</p>
+      <p>Inspect this element in DevTools ,  you'll see HTML comments in the DOM.</p>
       <!-- Section: user-visible content -->
       <p class="highlight">
         This paragraph has a comment above and below it in the template source.
@@ -173,7 +173,7 @@
     <p class="description">
       <code>data-</code> prefixed attributes no longer accidentally bind to
       component inputs or outputs. They're treated as plain HTML data
-      attributes — useful for testing IDs, analytics hooks, and CSS selectors.
+      attributes ,  useful for testing IDs, analytics hooks, and CSS selectors.
     </p>
 
     <div class="tags-demo">
@@ -219,23 +219,23 @@
     <h2 id="summary-heading">Summary</h2>
     <ul class="api-notes-list">
       <li>
-        <strong>Safe navigation narrowing</strong> — <code>?.</code>
+        <strong>Safe navigation narrowing</strong> ,  <code>?.</code>
         correctly narrows nullable types through the chain. After
         <code>user?.company</code> succeeds, <code>company</code> is
         non-null.
       </li>
       <li>
-        <strong>Optional chaining = <code>undefined</code></strong> —
+        <strong>Optional chaining = <code>undefined</code></strong> ,
         Short-circuited <code>?.</code> returns <code>undefined</code>,
         not <code>null</code>, matching JavaScript semantics.
       </li>
       <li>
-        <strong>HTML comments</strong> —
+        <strong>HTML comments</strong> ,
         <code>&lt;!-- ... --&gt;</code> in templates are preserved in the
         rendered DOM instead of being stripped.
       </li>
       <li>
-        <strong><code>data-*</code> isolation</strong> —
+        <strong><code>data-*</code> isolation</strong> ,
         <code>data-</code> prefixed attributes are treated as plain HTML
         attributes and never bind to component inputs or outputs.
       </li>

@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding()),
     // paramsInheritanceStrategy defaults to 'always' in Angular 22
-    provideHttpClient(), // FetchBackend is now the default — withFetch() is deprecated
+    provideHttpClient(), // FetchBackend is now the default ,  withFetch() is deprecated
     provideClientHydration(withEventReplay()),
     // Incremental hydration is now enabled by default in Angular 22!
   ],

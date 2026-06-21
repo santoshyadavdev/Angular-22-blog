@@ -37,7 +37,7 @@ export class FetchBackendDemo {
       : this.backend.constructor.name;
 
   // ════════════════════════════════════════════════════════════
-  // 2. httpResource — uses FetchBackend by default
+  // 2. httpResource ,  uses FetchBackend by default
   //    Fetches a public JSON API
   // ════════════════════════════════════════════════════════════
   protected readonly userId = signal(1);
@@ -64,7 +64,7 @@ export class FetchBackendDemo {
   }
 
   // ════════════════════════════════════════════════════════════
-  // 3. HttpClient.get — also uses FetchBackend now
+  // 3. HttpClient.get ,  also uses FetchBackend now
   //    Demonstrates a manual fetch with response headers
   // ════════════════════════════════════════════════════════════
   protected readonly manualResult = signal<{
@@ -101,7 +101,7 @@ export class FetchBackendDemo {
   }
 
   // ════════════════════════════════════════════════════════════
-  // 4. Upload progress — requires withXhr()
+  // 4. Upload progress ,  requires withXhr()
   //    Shows what happens when you need progress events
   // ════════════════════════════════════════════════════════════
   protected readonly uploadNote = signal(
@@ -123,7 +123,7 @@ export class FetchBackendDemo {
         if (next >= 100) {
           clearInterval(interval);
           this.uploadStatus.set(
-            'Complete! (Simulated — real upload progress requires withXhr())'
+            'Complete! (Simulated ,  real upload progress requires withXhr())'
           );
           return 100;
         }

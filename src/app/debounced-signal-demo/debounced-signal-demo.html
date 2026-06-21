@@ -66,7 +66,7 @@
     <pre class="code-note"><code>searchQuery = signal('');
 debouncedQuery = debounced(() => this.searchQuery(), 300);
 
-// searchResults computed from the debounced value — not the raw signal
+// searchResults computed from the debounced value ,  not the raw signal
 searchResults = computed(() => &#123;
   const query = this.debouncedQuery.value()?.toLowerCase() ?? '';
   return MOCK_DATA.filter(item => item.title.includes(query));
@@ -135,7 +135,7 @@ usernameValidation = resource(&#123;
   </section>
 
   <!-- ════════════════════════════════════════════════════════ -->
-  <!-- 3. Slider — immediate vs debounced                      -->
+  <!-- 3. Slider ,  immediate vs debounced                      -->
   <!-- ════════════════════════════════════════════════════════ -->
   <section class="demo-section" aria-labelledby="slider-heading">
     <h2 id="slider-heading">3. Immediate vs Debounced Value</h2>

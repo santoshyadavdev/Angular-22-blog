@@ -36,7 +36,7 @@
       }
     </div>
 
-    <pre class="code-note"><code>// Angular 22 — withFetch() is deprecated, fetch is default
+    <pre class="code-note"><code>// Angular 22 ,  withFetch() is deprecated, fetch is default
 provideHttpClient()
 
 // Only add withXhr() if you need upload progress
@@ -87,11 +87,11 @@ userResource = httpResource&lt;User&gt;(
   () => \`https://api.example.com/users/\$&#123;this.userId()&#125;\`
 );
 
-// Reactively updates when userId() changes — powered by FetchBackend</code></pre>
+// Reactively updates when userId() changes ,  powered by FetchBackend</code></pre>
   </section>
 
   <!-- ════════════════════════════════════════════════════════ -->
-  <!-- 3. HttpClient.get — response headers via Fetch          -->
+  <!-- 3. HttpClient.get ,  response headers via Fetch          -->
   <!-- ════════════════════════════════════════════════════════ -->
   <section class="demo-section" aria-labelledby="manual-heading">
     <h2 id="manual-heading">3. <code>HttpClient</code> with Full Response</h2>
@@ -128,7 +128,7 @@ userResource = httpResource&lt;User&gt;(
       <p class="error-text" role="alert">{{ manualError() }}</p>
     }
 
-    <pre class="code-note"><code>// Works exactly the same — but now uses Fetch API internally
+    <pre class="code-note"><code>// Works exactly the same ,  but now uses Fetch API internally
 this.http.get('/api/posts/1', &#123; observe: 'response' &#125;)
   .subscribe(response => &#123;
     response.status;                          // 200
@@ -138,7 +138,7 @@ this.http.get('/api/posts/1', &#123; observe: 'response' &#125;)
   </section>
 
   <!-- ════════════════════════════════════════════════════════ -->
-  <!-- 4. Upload progress — XHR-only feature                   -->
+  <!-- 4. Upload progress ,  XHR-only feature                   -->
   <!-- ════════════════════════════════════════════════════════ -->
   <section class="demo-section" aria-labelledby="upload-heading">
     <h2 id="upload-heading">4. Upload Progress (XHR Only)</h2>

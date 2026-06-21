@@ -33,7 +33,7 @@ import { JsonPipe } from '@angular/common';
       </div>
       <p class="explanation">
         In Angular 22, <code>teamId</code> is automatically inherited
-        from the parent route — no <code>paramsInheritanceStrategy: 'always'</code>
+        from the parent route ,  no <code>paramsInheritanceStrategy: 'always'</code>
         config needed.
       </p>
       <div class="all-params">
@@ -179,11 +179,11 @@ provideRouter(routes, withComponentInputBinding({
 </a>
 <!-- Browser shows: /team-alpha/member-2 -->`;
 
-  protected readonly provideRoutesCode = `// BEFORE (Angular ≤21) — provideRoutes()
+  protected readonly provideRoutesCode = `// BEFORE (Angular ≤21) ,  provideRoutes()
 import { provideRoutes } from '@angular/router';
 providers: [provideRoutes(childRoutes)]  // ❌ Removed
 
-// AFTER (Angular 22) — use provideRouter() or ROUTES token
+// AFTER (Angular 22) ,  use provideRouter() or ROUTES token
 import { provideRouter, ROUTES } from '@angular/router';
 
 // Option 1: provideRouter (recommended)
@@ -192,27 +192,27 @@ provideRouter(routes)
 // Option 2: ROUTES multi token (for lazy/dynamic routes)
 { provide: ROUTES, useValue: childRoutes, multi: true }`;
 
-  protected readonly canMatchCode = `// BEFORE (Angular ≤21) — currentSnapshot was optional
+  protected readonly canMatchCode = `// BEFORE (Angular ≤21) ,  currentSnapshot was optional
 const canMatch: CanMatchFn = (route, segments) => {
   // currentSnapshot not used
   return true;
 };
 
-// AFTER (Angular 22) — currentSnapshot is now required
+// AFTER (Angular 22) ,  currentSnapshot is now required
 const canMatch: CanMatchFn = (route, segments, currentSnapshot) => {
   // currentSnapshot gives access to the current route state
   // useful for conditional matching based on current URL
   return currentSnapshot.url.length > 0;
 };`;
 
-  protected readonly titleStrategyCode = `// BEFORE (Angular ≤21) — returned any
+  protected readonly titleStrategyCode = `// BEFORE (Angular ≤21) ,  returned any
 class MyTitleStrategy extends TitleStrategy {
   override getResolvedTitleForRoute(snapshot: ActivatedRouteSnapshot): any {
     return snapshot.data['title'];
   }
 }
 
-// AFTER (Angular 22) — returns string | undefined
+// AFTER (Angular 22) ,  returns string | undefined
 class MyTitleStrategy extends TitleStrategy {
   override getResolvedTitleForRoute(
     snapshot: ActivatedRouteSnapshot

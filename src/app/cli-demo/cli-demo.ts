@@ -7,7 +7,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CliDemo {
-  vitestCode = `// angular.json — Vitest configuration options
+  vitestCode = `// angular.json ,  Vitest configuration options
 {
   "projects": {
     "my-app": {

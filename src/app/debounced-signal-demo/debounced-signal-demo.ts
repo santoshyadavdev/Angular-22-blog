@@ -34,13 +34,13 @@ const MOCK_DATA: SearchResult[] = [
 })
 export class DebouncedSignalDemo {
   // ════════════════════════════════════════════════════════════
-  // 1. Search input with debounced() — waits 300ms before
+  // 1. Search input with debounced() ,  waits 300ms before
   //    updating, great for filtering/API calls
   // ════════════════════════════════════════════════════════════
   protected readonly searchQuery = signal('');
   protected readonly searchUpdateCount = signal(0);
 
-  // debounced() returns a Resource<T> — value updates after 300ms idle
+  // debounced() returns a Resource<T> ,  value updates after 300ms idle
   protected readonly debouncedQuery = debounced(() => this.searchQuery(), 300);
 
   // Search results driven by the debounced query
@@ -60,7 +60,7 @@ export class DebouncedSignalDemo {
   }
 
   // ════════════════════════════════════════════════════════════
-  // 2. Form validation with debounced() — validate after
+  // 2. Form validation with debounced() ,  validate after
   //    the user stops typing
   // ════════════════════════════════════════════════════════════
   protected readonly username = signal('');
@@ -93,7 +93,7 @@ export class DebouncedSignalDemo {
   }
 
   // ════════════════════════════════════════════════════════════
-  // 3. Slider with debounced() — shows immediate vs debounced
+  // 3. Slider with debounced() ,  shows immediate vs debounced
   //    value to illustrate the delay
   // ════════════════════════════════════════════════════════════
   protected readonly sliderValue = signal(50);

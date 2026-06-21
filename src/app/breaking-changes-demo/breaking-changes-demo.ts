@@ -48,7 +48,7 @@ export class BreakingChangesDemo {
   protected readonly dynamicCreated = signal(false);
 
   // ─── Code snippets ───
-  protected readonly factoryCode = `// BEFORE (Angular ≤21) — ComponentFactoryResolver
+  protected readonly factoryCode = `// BEFORE (Angular ≤21) ,  ComponentFactoryResolver
 constructor(
   private resolver: ComponentFactoryResolver,
   private vcr: ViewContainerRef
@@ -59,7 +59,7 @@ createDynamic() {
   this.vcr.createComponent(factory);
 }
 
-// AFTER (Angular 22) — pass the class directly
+// AFTER (Angular 22) ,  pass the class directly
 private vcr = inject(ViewContainerRef);
 
 createDynamic() {
@@ -91,11 +91,11 @@ const ref = createNgModuleRef(SomeModule, injector); // ❌ Removed
 import { createNgModule } from '@angular/core';
 const ref = createNgModule(SomeModule, injector); // ✅`;
 
-  protected readonly bootstrapCode = `// BEFORE (Angular ≤21) — accepted any
+  protected readonly bootstrapCode = `// BEFORE (Angular ≤21) ,  accepted any
 appRef.bootstrap(SomeComponent, document.getElementById('root'));
 // No error even if getElementById returns null
 
-// AFTER (Angular 22) — stricter typing
+// AFTER (Angular 22) ,  stricter typing
 const el = document.getElementById('root');
 if (el) {
   appRef.bootstrap(SomeComponent, el); // ✅ non-nullable
@@ -147,7 +147,7 @@ appRef.bootstrap(SomeComponent, document.getElementById('root')!);`;
     createComponent(DynamicGreeting, {
       environmentInjector: this.envInjector,
     });
-    // Note: this creates an unattached component — the VCR approach is preferred
+    // Note: this creates an unattached component ,  the VCR approach is preferred
     // for actually rendering. This just demonstrates the API works.
   }
 }

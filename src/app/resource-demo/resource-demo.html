@@ -14,7 +14,7 @@
     <p class="description">
       Pass an <code>id</code> to <code>resource()</code> to cache its value in
       <code>TransferState</code> during SSR. The client reuses the cached data
-      instead of re-fetching — zero network requests for the initial load.
+      instead of re-fetching ,  zero network requests for the initial load.
     </p>
 
     <div class="result-card">
@@ -39,7 +39,7 @@
   </section>
 
   <!-- ════════════════════════════════════════════════════════ -->
-  <!-- 2. ResourceParamsStatus — special return statuses       -->
+  <!-- 2. ResourceParamsStatus ,  special return statuses       -->
   <!-- ════════════════════════════════════════════════════════ -->
   <section class="demo-section" aria-labelledby="params-heading">
     <h2 id="params-heading">2. <code>ResourceParamsStatus</code></h2>
@@ -73,7 +73,7 @@
     <div class="result-card">
       @switch (userDetail.status()) {
         @case ('idle') {
-          <p class="idle">No user selected — resource is <code>idle</code></p>
+          <p class="idle">No user selected ,  resource is <code>idle</code></p>
         }
         @case ('loading') {
           <p class="loading">Loading user...</p>
@@ -117,7 +117,7 @@ userDetail = resource&lt;User, number&gt;(&#123;
     <h2 id="stream-heading">3. Streaming <code>resource</code></h2>
     <p class="description">
       Use <code>stream</code> instead of <code>loader</code> to return a signal
-      that can push synchronous value updates over time — perfect for
+      that can push synchronous value updates over time ,  perfect for
       WebSocket feeds, Server-Sent Events, or polling patterns.
     </p>
 
@@ -198,7 +198,7 @@ userDetail = resource&lt;User, number&gt;(&#123;
     <pre class="code-note"><code>// Resource A
 postResource = resource(&#123; params: () => this.postId(), loader: ... &#125;);
 
-// Resource B — chained off A
+// Resource B ,  chained off A
 authorResource = resource(&#123;
   params: (ctx) => &#123;
     const post = ctx.chain(this.postResource); // waits for post
@@ -223,26 +223,26 @@ composedResource = resourceFromSnapshots(() => &#123;
     <h2 id="summary-heading">Summary</h2>
     <ul class="api-notes-list">
       <li>
-        <strong><code>id</code> option</strong> — Cache resource data in
+        <strong><code>id</code> option</strong> ,  Cache resource data in
         <code>TransferState</code> during SSR. The client rehydrates from
         cache without re-fetching.
       </li>
       <li>
-        <strong><code>ResourceParamsStatus</code></strong> — Throw
+        <strong><code>ResourceParamsStatus</code></strong> ,  Throw
         <code>.IDLE</code> or <code>.LOADING</code> from params to
         control the resource state without triggering the loader.
       </li>
       <li>
-        <strong><code>stream</code></strong> — Return a signal from the
+        <strong><code>stream</code></strong> ,  Return a signal from the
         loader that pushes synchronous updates. Perfect for real-time
         data sources.
       </li>
       <li>
-        <strong><code>resourceFromSnapshots()</code></strong> — Compose
+        <strong><code>resourceFromSnapshots()</code></strong> ,  Compose
         multiple resources into one by merging their snapshot signals.
       </li>
       <li>
-        <strong><code>ctx.chain()</code></strong> — In the params function,
+        <strong><code>ctx.chain()</code></strong> ,  In the params function,
         chain off another resource's value. Propagates loading/error
         states automatically.
       </li>

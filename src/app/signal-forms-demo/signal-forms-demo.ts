@@ -158,7 +158,7 @@ export class RatingControl implements FormValueControl<number> {
   readonly required = input(false); // ← optional: auto-synced
 }
 
-// 2. Use it with [formField] — just like a native input!
+// 2. Use it with [formField] ,  just like a native input!
 <app-rating-control [formField]="ratingForm.rating" />
 
 // The Field directive automatically:
@@ -174,7 +174,7 @@ export class RatingControl implements FormValueControl<number> {
   protected readonly submitting = signal(false);
   protected readonly submittedData = signal<ProfileModel | null>(null);
 
-  // ─── reloadValidation() — new in Angular 22 ───
+  // ─── reloadValidation() ,  new in Angular 22 ───
   // Directly triggers async validators without value changes
   protected reloadUsernameValidation(): void {
     this.profileForm.username().reloadValidation();

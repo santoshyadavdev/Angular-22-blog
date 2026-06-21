@@ -48,7 +48,7 @@ export class ResourceDemo {
   });
 
   // ════════════════════════════════════════════════════════════
-  // 2. ResourceParamsStatus — special return statuses
+  // 2. ResourceParamsStatus ,  special return statuses
   //    Throw IDLE or LOADING from params to control state
   // ════════════════════════════════════════════════════════════
   protected readonly selectedUserId = signal<number | null>(null);
@@ -57,7 +57,7 @@ export class ResourceDemo {
     params: () => {
       const id = this.selectedUserId();
       if (id === null) {
-        // Transition to idle — no request needed yet
+        // Transition to idle ,  no request needed yet
         throw ResourceParamsStatus.IDLE;
       }
       return id;
@@ -75,7 +75,7 @@ export class ResourceDemo {
   }
 
   // ════════════════════════════════════════════════════════════
-  // 3. Stream Resource — synchronous value updates
+  // 3. Stream Resource ,  synchronous value updates
   //    Uses `stream` instead of `loader` to provide a signal
   //    that can update the value synchronously over time
   // ════════════════════════════════════════════════════════════
@@ -132,7 +132,7 @@ export class ResourceDemo {
   // Resource B: fetch the author using the post's userId (chained)
   private readonly authorResource = resource<User, number>({
     params: (ctx) => {
-      // Chain off the post resource — propagates loading/error state
+      // Chain off the post resource ,  propagates loading/error state
       const post = ctx.chain(this.postResource);
       return post!.userId;
     },

@@ -7,7 +7,7 @@ import { Service } from '@angular/core';
 @Service()
 export default class MarkdownRendererService {
   render(markdown: string): string {
-    // Simple mock renderer — in a real app this could wrap a heavy library
+    // Simple mock renderer ,  in a real app this could wrap a heavy library
     return markdown
       .replace(/^### (.+)$/gm, '<h3>$1</h3>')
       .replace(/^## (.+)$/gm, '<h2>$1</h2>')

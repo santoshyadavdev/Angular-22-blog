@@ -62,7 +62,7 @@ export class CommentsWidget {
     const id = this.comments().length + 1;
     this.comments.update((c) => [
       ...c,
-      { id, author: 'You', text: `Comment #${id} — added after hydration!` },
+      { id, author: 'You', text: `Comment #${id} ,  added after hydration!` },
     ]);
   }
 }
