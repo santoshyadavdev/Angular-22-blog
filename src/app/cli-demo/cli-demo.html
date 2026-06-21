@@ -25,6 +25,65 @@
     </div>
   </section>
 
+  <!-- Section: AI Config + Angular MCP Server -->
+  <section class="demo-section">
+    <h3>AI Config &amp; Angular MCP Server</h3>
+    <p>
+      The <code>ng generate ai-config</code> schematic sets up your project
+      for AI-assisted development. It generates two things:
+    </p>
+
+    <div class="ai-config-grid">
+      <div class="ai-config-card">
+        <h4>AGENTS.md / GEMINI.md</h4>
+        <p>
+          A markdown file with Angular best practices, project conventions,
+          and coding standards that AI tools read as context. This helps
+          AI assistants generate code that follows <strong>your project's
+          patterns</strong>.
+        </p>
+      </div>
+      <div class="ai-config-card">
+        <h4>Angular MCP Server Config</h4>
+        <p>
+          Configures the <strong>Angular CLI MCP server</strong>
+          (<code>@angular/cli mcp</code>) so AI agents can query your
+          project structure, look up Angular docs, find code examples,
+          and get version-specific best practices — all programmatically.
+        </p>
+      </div>
+    </div>
+
+    <p class="description">
+      Supported tools: <strong>VS Code</strong>, <strong>Claude Code</strong>,
+      <strong>Cursor</strong>, <strong>Gemini CLI</strong>, and
+      <strong>OpenAI Codex</strong>. Each tool gets its config file in the
+      expected location (e.g., <code>.vscode/mcp.json</code> for VS Code,
+      <code>CLAUDE.toml</code> for Claude Code).
+    </p>
+
+    <div class="code-note">
+      <div class="code-label">Running the schematic</div>
+      <pre><code>{{ aiConfigCode }}</code></pre>
+    </div>
+
+    <div class="code-note">
+      <div class="code-label">Generated MCP config files</div>
+      <pre><code>{{ mcpConfigCode }}</code></pre>
+    </div>
+
+    <div class="code-note">
+      <div class="code-label">What the Angular MCP server provides</div>
+      <pre><code>{{ mcpServerCode }}</code></pre>
+    </div>
+
+    <div class="info-callout">
+      <strong>New projects get this automatically!</strong>
+      <code>ng new</code> now generates <code>.vscode/mcp.json</code> by
+      default, so the Angular MCP server is pre-configured out of the box.
+    </div>
+  </section>
+
   <!-- Section 2: Vitest Improvements -->
   <section class="demo-section">
     <h3>Vitest Improvements</h3>
