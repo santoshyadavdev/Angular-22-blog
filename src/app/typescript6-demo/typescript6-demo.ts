@@ -55,6 +55,11 @@ console.log(diff.days); // days between`;
   wordInput = signal('The quick brown fox jumps over the lazy dog. The dog barked at the fox.');
   wordFrequencies = signal<[string, number][]>([]);
 
+  // getOrInsertComputed demo — lazy cache
+  cacheInput = signal('hello');
+  cacheResults = signal<[string, string][]>([]);
+  private readonly transformCache = new Map<string, string>();
+
   getOrInsertCode = `// Map.getOrInsert() ,  default value if key missing
 const freq = new Map<string, number>();
 
@@ -102,12 +107,12 @@ const matches = text.match(regex);`;
     afterNextRender(() => {
       // Check Temporal availability
       try {
-        const instant = (globalThis as any).Temporal?.Now?.instant();
+        const instant = Temporal?.Now?.instant();
         if (instant) {
           this.temporalAvailable.set(true);
           this.currentInstant.set(instant.toString());
-          const today = (globalThis as any).Temporal.Now.plainDateISO();
-          const sampleDate = (globalThis as any).Temporal.PlainDate.from('2026-01-01');
+          const today = Temporal.Now.plainDateISO();
+          const sampleDate = Temporal.PlainDate.from('2026-01-01');
           this.plainDate.set(sampleDate.toString());
           const diff = sampleDate.until(today);
           this.daysBetween.set(`${Math.abs(diff.days)} days`);
@@ -118,7 +123,7 @@ const matches = text.match(regex);`;
 
       // Check RegExp.escape availability
       try {
-        if (typeof (RegExp as any).escape === 'function') {
+        if (typeof RegExp.escape === 'function') {
           this.regexpEscapeAvailable.set(true);
           this.updateEscapedTerm();
         }
@@ -130,8 +135,8 @@ const matches = text.match(regex);`;
 
   calculateDaysUntil(): void {
     try {
-      const target = (globalThis as any).Temporal.PlainDate.from(this.targetDate());
-      const today = (globalThis as any).Temporal.Now.plainDateISO();
+      const target = Temporal.PlainDate.from(this.targetDate());
+      const today = Temporal.Now.plainDateISO();
       const diff = today.until(target);
       this.daysUntilTarget.set(`${diff.days} days`);
     } catch {
@@ -145,23 +150,32 @@ const matches = text.match(regex);`;
     const freq = new Map<string, number>();
 
     for (const word of words) {
-      if (typeof (freq as any).getOrInsert === 'function') {
-        const count = (freq as any).getOrInsert(word, 0) as number;
-        freq.set(word, count + 1);
-      } else {
-        // Fallback for runtimes without getOrInsert
-        const count = freq.get(word) ?? 0;
-        freq.set(word, count + 1);
-      }
+      const count = freq.getOrInsert(word, 0);
+      freq.set(word, count + 1);
     }
 
     const sorted = [...freq.entries()].sort((a, b) => b[1] - a[1]);
     this.wordFrequencies.set(sorted);
   }
 
+  lookupInCache(): void {
+    const key = this.cacheInput().trim().toLowerCase();
+    if (!key) return;
+    // Lazily compute and cache the transformed value
+    this.transformCache.getOrInsertComputed(key, (k) =>
+      k.split('').reverse().join('').toUpperCase()
+    );
+    this.cacheResults.set([...this.transformCache.entries()]);
+  }
+
+  clearCache(): void {
+    this.transformCache.clear();
+    this.cacheResults.set([]);
+  }
+
   updateEscapedTerm(): void {
     try {
-      const escaped = (RegExp as any).escape(this.searchTerm());
+      const escaped = RegExp.escape(this.searchTerm());
       this.escapedTerm.set(escaped);
       const regex = new RegExp(escaped, 'g');
       const text = this.sampleText();

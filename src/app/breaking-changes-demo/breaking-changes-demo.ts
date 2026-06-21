@@ -121,6 +121,35 @@ appRef.bootstrap(SomeComponent, document.getElementById('root')!);`;
 // ⚠️ If you relied on styles persisting after component destroy,
 // move those styles to a global stylesheet instead.`;
 
+  // ─── Section 6: Testability uses PendingTasks ───
+  protected readonly testabilityCode = `// BEFORE (Angular ≤21) — Testability tracked Zone.js macrotasks
+// Protractor relied on Zone.js to know when Angular was "stable"
+
+// AFTER (Angular 22) — Testability uses PendingTasks internally
+// Works with AND without Zone.js (zoneless apps!)
+
+// ── In your app code: use PendingTasks ──
+const pendingTasks = inject(PendingTasks);
+const cleanup = pendingTasks.add();
+
+// App is now "unstable" — e2e tests will wait
+await doAsyncWork();
+
+// Mark as complete — app becomes "stable" again
+cleanup();
+
+// Check stability reactively via the built-in signal:
+pendingTasks.hasPendingTasks();   // true while tasks pending
+
+// ── In e2e tests: Testability reads PendingTasks under the hood ──
+// (Testability is consumed by test frameworks externally,
+//  not injected in app components)
+const testability = getAllAngularTestabilities()[0];
+testability.isStable();           // false while tasks pending
+testability.whenStable(() => {    // callback fires when all done
+  console.log('App is stable!');
+});`;
+
   protected readonly showStyledCard = signal(true);
   protected readonly styleTagCount = signal(0);
 

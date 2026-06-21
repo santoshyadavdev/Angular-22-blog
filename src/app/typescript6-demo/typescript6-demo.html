@@ -105,6 +105,40 @@
       </div>
     }
 
+    <h4 class="sub-heading"><code>getOrInsertComputed()</code> — Lazy Cache Demo</h4>
+    <p class="description">
+      <code>getOrInsertComputed(key, fn)</code> only calls the callback when the key
+      is missing. Try adding the same word twice — the second lookup hits the cache
+      without recomputing.
+    </p>
+
+    <div class="interactive-area">
+      <label for="cache-input">Enter a word to reverse &amp; cache:</label>
+      <div class="input-row">
+        <input
+          id="cache-input"
+          type="text"
+          [ngModel]="cacheInput()"
+          (ngModelChange)="cacheInput.set($event)"
+        />
+        <button class="btn" (click)="lookupInCache()">Lookup</button>
+        <button class="btn btn-secondary" (click)="clearCache()">Clear Cache</button>
+      </div>
+    </div>
+
+    @if (cacheResults().length > 0) {
+      <div class="result-box">
+        <div class="freq-list">
+          @for (entry of cacheResults(); track entry[0]) {
+            <span class="freq-item">
+              <code>{{ entry[0] }}</code>
+              <span class="freq-count">→ {{ entry[1] }}</span>
+            </span>
+          }
+        </div>
+      </div>
+    }
+
     <pre class="code-note"><code>{{ getOrInsertCode }}</code></pre>
   </div>
 

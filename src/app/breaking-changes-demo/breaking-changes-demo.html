@@ -223,6 +223,43 @@
   </section>
 
   <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 6. Testability uses PendingTasks                        -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="testability-heading">
+    <h2 id="testability-heading">
+      <span class="changed-badge">Changed</span>
+      <code>Testability</code> Uses <code>PendingTasks</code>
+    </h2>
+    <p class="description">
+      Angular 22's <code>Testability</code> service no longer relies on
+      Zone.js to determine app stability. It now uses <code>PendingTasks</code>,
+      which works in both zoned and <strong>zoneless</strong> apps.
+      Call <code>pendingTasks.add()</code> to signal async work, and the
+      returned cleanup function to mark it complete.
+    </p>
+
+    <div class="migration-card">
+      <div class="migration-header">
+        <span class="badge before">Before (Zone.js)</span>
+        <span class="arrow">&rarr;</span>
+        <span class="badge after">After (PendingTasks)</span>
+      </div>
+      <div class="migration-grid">
+        <div class="migration-old">
+          <p>Stability tracked via Zone.js macrotask queue</p>
+          <p>Only worked with <code>zone.js</code> loaded</p>
+        </div>
+        <div class="migration-new">
+          <p>Stability tracked via <code>PendingTasks</code></p>
+          <p>Works with <strong>and</strong> without Zone.js</p>
+        </div>
+      </div>
+    </div>
+
+    <pre class="code-note"><code>{{ testabilityCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
   <!-- Quick Reference Table                                   -->
   <!-- ════════════════════════════════════════════════════════ -->
   <section class="demo-section notes-section" aria-labelledby="summary-heading">
@@ -255,6 +292,10 @@
       <div class="table-row">
         <code>Styles persist after destroy</code>
         <span>Styles now <code>removed from DOM</code> on destroy</span>
+      </div>
+      <div class="table-row">
+        <code>Testability via Zone.js</code>
+        <span><code>PendingTasks</code> for stability (works zoneless)</span>
       </div>
     </div>
   </section>

@@ -144,8 +144,11 @@ this.http.get('/api/posts/1', &#123; observe: 'response' &#125;)
     <h2 id="upload-heading">4. Upload Progress (XHR Only)</h2>
     <p class="description">
       The Fetch API does not support upload progress events.
-      If your app needs <code>reportProgress: true</code> for uploads,
+      The Fetch API does not support upload progress events.
+      If your app needs <code>reportUploadProgress: true</code>,
       switch to <code>provideHttpClient(withXhr())</code>.
+      Download progress works with FetchBackend via
+      <code>reportDownloadProgress: true</code>.
     </p>
 
     <button type="button" class="btn" (click)="simulateUpload()">
@@ -169,18 +172,24 @@ this.http.get('/api/posts/1', &#123; observe: 'response' &#125;)
       <p class="upload-status">{{ uploadStatus() }}</p>
     }
 
-    <pre class="code-note"><code>// To enable real upload progress, use withXhr():
+    <pre class="code-note"><code>// Upload progress requires withXhr():
 // app.config.ts
 provideHttpClient(withXhr())
 
 // Then in your component:
 this.http.post('/api/upload', formData, &#123;
-  reportProgress: true,
+  reportUploadProgress: true,  // ← replaces reportProgress
   observe: 'events',
 &#125;).subscribe(event => &#123;
   if (event.type === HttpEventType.UploadProgress) &#123;
     const pct = Math.round(100 * event.loaded / (event.total ?? 1));
   &#125;
+&#125;);
+
+// Download progress works with FetchBackend:
+this.http.get('/api/file', &#123;
+  reportDownloadProgress: true,
+  observe: 'events',
 &#125;);</code></pre>
   </section>
 
@@ -203,7 +212,9 @@ this.http.post('/api/upload', formData, &#123;
       <li>
         <strong>Upload progress?</strong> &mdash;
         Add <code>withXhr()</code> if you need
-        <code>reportProgress: true</code> for uploads.
+        <code>reportUploadProgress: true</code> for uploads.
+        Download progress works with FetchBackend via
+        <code>reportDownloadProgress: true</code>.
         Download progress still works with <code>FetchBackend</code>.
       </li>
       <li>

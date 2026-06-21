@@ -216,6 +216,54 @@ h2 code { background: #f0f0f5; padding: 0.1em 0.3em; border-radius: 4px; font-si
   font-size: 0.78rem;
 }
 
+/* Testability demo */
+.testability-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.stability-indicator {
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+}
+
+.stability-indicator.stable {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.stability-indicator.unstable {
+  background: #fee2e2;
+  color: #991b1b;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.task-log {
+  background: #1a1a2e;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.78rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.log-entry {
+  color: #a5b4fc;
+  padding: 0.15rem 0;
+}
+
 /* Summary table */
 .summary-table {
   border: 1px solid #e5e5ea;
