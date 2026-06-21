@@ -126,11 +126,108 @@ export class RouteChild {
 })
 export class BrowserUrlSection {}
 
+// ─── Section 2: withComponentInputBinding demo ───
+@Component({
+  selector: 'app-binding-demo-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink],
+  template: `
+    <div class="binding-demo">
+      <p class="note">
+        Try these links and observe the <strong>tab</strong> input in the
+        child view above.
+      </p>
+
+      <div class="link-list">
+        <a [routerLink]="['/router-demo/teams', '1', 'members', '1']"
+           [queryParams]="{tab: 'settings', role: 'admin'}"
+           class="demo-link">
+          With query params: <code>tab=settings&amp;role=admin</code>
+        </a>
+        <a [routerLink]="['/router-demo/teams', '1', 'members', '1']"
+           [queryParams]="{role: 'viewer'}"
+           class="demo-link">
+          Only unmatched param: <code>role=viewer</code> (no tab)
+        </a>
+        <a [routerLink]="['/router-demo/teams', '1', 'members', '1']"
+           class="demo-link">
+          No query params at all
+        </a>
+      </div>
+
+      <div class="behavior-card">
+        <h4>What to observe</h4>
+        <ul>
+          <li>
+            <strong>With <code>tab=settings</code>:</strong> The
+            <code>tab</code> input shows <code>"settings"</code>
+          </li>
+          <li>
+            <strong>Without <code>tab</code>:</strong> The input becomes
+            <code>undefined</code> (default: <code>alwaysUndefined</code>)
+          </li>
+          <li>
+            <strong><code>role</code> param:</strong> Ignored — no matching
+            input on the component
+          </li>
+        </ul>
+      </div>
+
+      <div class="behavior-card alt">
+        <h4>With <code>undefinedIfStale</code></h4>
+        <p>
+          If using
+          <code>unmatchedInputBehavior: 'undefinedIfStale'</code>,
+          the <code>tab</code> input would retain its previous value
+          when navigating without <code>tab</code> — it only resets to
+          <code>undefined</code> if the router previously set it.
+        </p>
+      </div>
+    </div>
+  `,
+  styles: `
+    .binding-demo { margin: 0.5rem 0; }
+    .note { font-size: 0.85rem; color: #555; margin-bottom: 0.75rem; }
+    .note strong { color: #4f46e5; }
+    .link-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+    .demo-link {
+      display: block;
+      padding: 0.6rem 0.85rem;
+      background: #f8f8fc;
+      border: 1.5px solid #e5e5ea;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #6366f1;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .demo-link:hover { border-color: #6366f1; background: #f0f0ff; }
+    .demo-link code { background: #eef; padding: 0.1em 0.3em; border-radius: 3px; font-size: 0.88em; }
+    .behavior-card {
+      padding: 0.75rem;
+      background: #fff;
+      border: 1px solid #c7d2fe;
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
+    }
+    .behavior-card h4 { margin: 0 0 0.35rem; font-size: 0.9rem; color: #4f46e5; }
+    .behavior-card ul { margin: 0; padding-left: 1.2rem; font-size: 0.82rem; color: #555; }
+    .behavior-card li { margin-bottom: 0.25rem; }
+    .behavior-card code { background: #eef; padding: 0.05em 0.25em; border-radius: 3px; font-size: 0.9em; }
+    .behavior-card.alt { border-color: #fbbf24; background: #fffbeb; }
+    .behavior-card.alt h4 { color: #92400e; }
+    .behavior-card.alt p { margin: 0; font-size: 0.82rem; color: #78350f; }
+    .behavior-card.alt code { background: #fef3c7; }
+  `,
+})
+export class BindingDemoSection {}
+
 // ─── Main demo component ───
 @Component({
   selector: 'app-router-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, RouterOutlet, BrowserUrlSection],
+  imports: [RouterLink, RouterOutlet, BrowserUrlSection, BindingDemoSection],
   templateUrl: './router-demo.html',
   styleUrl: './router-demo.css',
 })
