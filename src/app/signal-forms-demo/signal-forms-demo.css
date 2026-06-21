@@ -275,3 +275,128 @@ textarea {
 .fvc-state strong {
   color: #6366f1;
 }
+/* Breaking change section */
+.breaking-change-section {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+}
+
+.breaking-change-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.breaking-badge {
+  display: inline-block;
+  padding: 0.15em 0.55em;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.migration-card {
+  background: #fff;
+  border: 1px solid #e5e5ea;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.migration-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #f0f0f5;
+}
+
+.migration-row:last-child {
+  border-bottom: none;
+}
+
+.badge-before {
+  display: inline-block;
+  padding: 0.15em 0.45em;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  min-width: 48px;
+  text-align: center;
+}
+
+.badge-after {
+  display: inline-block;
+  padding: 0.15em 0.45em;
+  background: #dcfce7;
+  color: #166534;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  min-width: 48px;
+  text-align: center;
+}
+
+.strike {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.added {
+  color: #166534;
+  font-weight: 600;
+}
+
+.info-box {
+  padding: 0.75rem;
+  background: #fff;
+  border: 1px solid #c7d2fe;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 0.75rem;
+}
+
+.info-box code {
+  background: #eef2ff;
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  font-size: 0.88em;
+}
+
+.description {
+  color: #555;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.description code {
+  background: #eef;
+  padding: 0.05em 0.25em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.code-note {
+  background: #1a1a2e;
+  color: #e5e5ea;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  overflow-x: auto;
+  margin: 0.5rem 0 0;
+  line-height: 1.5;
+}

@@ -166,6 +166,24 @@ export class RatingControl implements FormValueControl<number> {
 // - Syncs disabled, touched, name, required
 // - Reports validation errors`;
 
+  // ─── min/max breaking change code snippet ───
+  protected readonly minMaxCode = `// BEFORE (Angular ≤21) — min/max accepted strings
+import { Validators } from '@angular/forms';
+
+// These worked but were error-prone:
+Validators.min('5')   // ← accepted string '5'
+Validators.max('100') // ← accepted string '100'
+
+// AFTER (Angular 22) — numbers only!
+Validators.min(5)     // ✅ number required
+Validators.max(100)   // ✅ number required
+
+// Validators.min('5')  // ❌ Type error: string not assignable to number
+
+// Signal Forms (same rule):
+min(p.age, 13);       // ✅ number only
+max(p.age, 150);      // ✅ number only`;
+
   // ─── Derived state ───
   protected readonly bioCharCount = computed(() => this.model().bio?.length ?? 0);
   protected readonly bioCharsRemaining = computed(() => 500 - this.bioCharCount());

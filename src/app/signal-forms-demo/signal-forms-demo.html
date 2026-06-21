@@ -337,6 +337,46 @@
     <!-- ════════════════════════════════════════════════════════════ -->
     <!-- Angular 22 API Highlights                                   -->
     <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- Breaking Change: min/max no longer accept strings          -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <section class="breaking-change-section" aria-labelledby="minmax-heading">
+      <h2 id="minmax-heading">
+        <span class="breaking-badge">Breaking</span>
+        <code>min</code> / <code>max</code> Validators: Numbers Only
+      </h2>
+      <p class="description">
+        The <code>min</code> and <code>max</code> validators (both in
+        <code>Validators</code> and signal forms) no longer accept
+        <code>string</code> values. You must pass a <code>number</code>.
+        This applies to Reactive Forms' <code>Validators.min()</code> /
+        <code>Validators.max()</code> and signal forms' <code>min()</code> /
+        <code>max()</code>.
+      </p>
+
+      <div class="migration-card">
+        <div class="migration-row">
+          <span class="badge-before">Before</span>
+          <code class="strike">Validators.min('5')</code> &mdash; accepted strings silently
+        </div>
+        <div class="migration-row">
+          <span class="badge-after">After</span>
+          <code class="added">Validators.min(5)</code> &mdash; number required, string is a type error
+        </div>
+      </div>
+
+      <div class="info-box">
+        The <strong>Age</strong> field above uses <code>min(p.age, 13)</code> and
+        <code>max(p.age, 150)</code> — both require numeric arguments.
+        If you previously passed strings like <code>min(p.age, '13')</code>,
+        you'll get a compile error in Angular 22.
+      </div>
+
+      <pre class="code-note"><code>{{ minMaxCode }}</code></pre>
+    </section>
+
+    <hr class="divider" />
+
     <section class="notes-section" aria-labelledby="notes-heading">
       <h2 id="notes-heading">Angular 22 API Highlights</h2>
       <ul class="api-notes-list">

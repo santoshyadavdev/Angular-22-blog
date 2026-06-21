@@ -260,6 +260,70 @@
   </section>
 
   <!-- ════════════════════════════════════════════════════════ -->
+  <!-- 7. ApplicationRef.bootstrap with config object          -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <section class="demo-section" aria-labelledby="bootstrap-config-heading">
+    <h2 id="bootstrap-config-heading">
+      <span class="new-badge">New</span>
+      <code>bootstrap()</code> &amp; <code>createComponent()</code> Config Object
+    </h2>
+    <p class="description">
+      <code>ApplicationRef.bootstrap()</code> and <code>createComponent()</code>
+      now accept a configuration object with <code>hostElement</code>,
+      <code>directives</code>, and <code>bindings</code>. Use
+      <code>inputBinding()</code>, <code>outputBinding()</code>, and
+      <code>twoWayBinding()</code> to wire up inputs and outputs
+      <strong>programmatically</strong> — no template required.
+      Signals passed to <code>inputBinding()</code> stay reactive.
+    </p>
+
+    <div class="migration-card">
+      <div class="migration-header">
+        <span class="badge before">Before (Angular &le;21)</span>
+        <span class="arrow">&rarr;</span>
+        <span class="badge after">After (Angular 22)</span>
+      </div>
+      <div class="migration-grid">
+        <div class="migration-old">
+          <code class="highlight-removed">appRef.bootstrap(Comp, element)</code>
+          <p>Only accepted a host element as second arg</p>
+          <p>No way to bind inputs/outputs at creation</p>
+        </div>
+        <div class="migration-new">
+          <code class="highlight-added">appRef.bootstrap(Comp, &#123; hostElement, bindings, directives &#125;)</code>
+          <p>Config object with reactive bindings</p>
+          <p><code>inputBinding()</code>, <code>outputBinding()</code>, <code>twoWayBinding()</code></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="interactive-section">
+      <p class="try-label">Try it — create a component with programmatic input/output bindings:</p>
+      <button
+        type="button"
+        class="btn"
+        (click)="createBoundCard()"
+        [class.disabled]="boundCardCreated()"
+        [attr.aria-disabled]="boundCardCreated()"
+      >
+        @if (boundCardCreated()) {
+          Component Created!
+        } @else {
+          createComponent(BoundCard, {{ '{' }} bindings {{ '}' }})
+        }
+      </button>
+
+      @if (boundCardDismissed()) {
+        <p class="dismissed-msg">
+          Component dismissed via <code>outputBinding('dismissed', ...)</code>
+        </p>
+      }
+    </div>
+
+    <pre class="code-note"><code>{{ bootstrapConfigCode }}</code></pre>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
   <!-- Quick Reference Table                                   -->
   <!-- ════════════════════════════════════════════════════════ -->
   <section class="demo-section notes-section" aria-labelledby="summary-heading">
@@ -296,6 +360,10 @@
       <div class="table-row">
         <code>Testability via Zone.js</code>
         <span><code>PendingTasks</code> for stability (works zoneless)</span>
+      </div>
+      <div class="table-row">
+        <code>bootstrap(Comp, element)</code>
+        <span><code>bootstrap(Comp, {{ '{' }} hostElement, bindings, directives {{ '}' }})</code></span>
       </div>
     </div>
   </section>

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal, ViewContainerRef, inject, createComponent, EnvironmentInjector } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, ViewContainerRef, inject, createComponent, EnvironmentInjector, input, output, inputBinding, outputBinding } from '@angular/core';
 
 // A simple component to demonstrate dynamic creation
 @Component({
@@ -33,6 +33,46 @@ export class DynamicGreeting {}
   `,
 })
 export class StyledCard {}
+
+// Component with inputs/outputs for programmatic binding demo
+@Component({
+  selector: 'app-bound-card',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <div class="bound-card">
+      <h4>{{ title() }}</h4>
+      <p>{{ message() }}</p>
+      <button type="button" class="bound-btn" (click)="dismissed.emit()">Dismiss</button>
+    </div>
+  `,
+  styles: `
+    .bound-card {
+      padding: 1rem;
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+      border: 2px solid #34d399;
+      border-radius: 8px;
+    }
+    .bound-card h4 { margin: 0 0 0.35rem; color: #065f46; }
+    .bound-card p { margin: 0.2rem 0; font-size: 0.85rem; color: #047857; }
+    .bound-btn {
+      margin-top: 0.5rem;
+      padding: 0.3rem 0.75rem;
+      background: #059669;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .bound-btn:hover { background: #047857; }
+  `,
+})
+export class BoundCard {
+  readonly title = input('Default Title');
+  readonly message = input('Default message');
+  readonly dismissed = output();
+}
 
 @Component({
   selector: 'app-breaking-changes-demo',
@@ -149,6 +189,64 @@ testability.isStable();           // false while tasks pending
 testability.whenStable(() => {    // callback fires when all done
   console.log('App is stable!');
 });`;
+
+  // ─── Section 7: ApplicationRef.bootstrap with config object ───
+  protected readonly bootstrapConfigCode = `// NEW in Angular 22: bootstrap() accepts a config object
+// with hostElement, directives, and bindings
+
+import { inputBinding, outputBinding, twoWayBinding } from '@angular/core';
+
+// ApplicationRef.bootstrap() with config:
+appRef.bootstrap(MyComponent, {
+  hostElement: document.getElementById('app')!,
+  directives: [LogDirective, { type: TooltipDirective, bindings: [
+    inputBinding('text', () => 'Hello!')
+  ]}],
+  bindings: [
+    inputBinding('title', () => 'My App'),
+    outputBinding('closed', () => console.log('closed')),
+  ],
+});
+
+// Also works with createComponent():
+const ref = createComponent(MyCard, {
+  environmentInjector,
+  bindings: [
+    inputBinding('title', titleSignal),  // reactive via signal!
+    inputBinding('message', () => 'Hello'),
+    outputBinding('dismissed', () => handleDismiss()),
+  ],
+});
+
+// Two-way binding with a writable signal:
+const selected = signal('option-a');
+createComponent(MySelect, {
+  environmentInjector,
+  bindings: [twoWayBinding('value', selected)],
+});`;
+
+  protected readonly boundCardCreated = signal(false);
+  protected readonly boundCardDismissed = signal(false);
+  private readonly cardTitle = signal('Dynamically Bound!');
+
+  protected createBoundCard(): void {
+    if (this.boundCardCreated()) return;
+
+    const ref = this.vcr.createComponent(BoundCard, {
+      bindings: [
+        inputBinding('title', this.cardTitle),
+        inputBinding('message', () => 'This component was created with inputBinding() — no template needed!'),
+        outputBinding('dismissed', () => {
+          ref.destroy();
+          this.boundCardCreated.set(false);
+          this.boundCardDismissed.set(true);
+        }),
+      ],
+    });
+
+    this.boundCardCreated.set(true);
+    this.boundCardDismissed.set(false);
+  }
 
   protected readonly showStyledCard = signal(true);
   protected readonly styleTagCount = signal(0);
