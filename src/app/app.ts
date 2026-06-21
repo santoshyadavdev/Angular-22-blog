@@ -6,7 +6,6 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-// MatNavList removed ,  using plain nav for full style control
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 
